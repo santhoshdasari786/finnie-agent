@@ -16,9 +16,9 @@ from tests.conftest import FakeLLM
 pytestmark = pytest.mark.asyncio
 
 
-def quote(symbol="NIFTY50", exchange="INDEX", price=25030.35, change=2.01):
+def quote(symbol="NIFTY50", exchange="INDEX", price=25030.35, change=2.01, stale=False):
     return Quote(instrument=Instrument(symbol=symbol, exchange=exchange), price=price, change_pct=change,
-                 currency="INR", as_of=datetime(2026, 11, 7, 8, 30, tzinfo=timezone.utc), source="yfinance")
+                 currency="INR", as_of=datetime(2026, 11, 7, 8, 30, tzinfo=timezone.utc), source="yfinance", stale=stale)
 
 
 class FakeProvider:
@@ -87,6 +87,20 @@ async def test_structured_data_is_returned_for_the_ui(agent):
 async def test_missing_change_pct_is_shown_as_not_available():
     assert "change n/a" in facts_line(quote(change=None))
 
+async def test_an_old_price_is_labelled_as_possibly_out_of_date():
+    line = facts_line(quote(stale=True))
+    assert "25,030.35" in line and "could not refresh" in line and "14:00 IST" in line      # still shows when it was fetched
+
+
+async def test_a_fresh_price_has_no_warning():
+    assert "refresh" not in facts_line(quote())
+
+
+async def test_the_stale_flag_reaches_the_ui_data(llm):
+    r = await MarketAnalysisAgent(FakeProvider(quotes=[quote(stale=True)]), llm=llm).run("Nifty today")
+    assert r.data["quotes"][0]["stale"] is True and "could not refresh" in r.text
+
+
 async def test_time_is_shown_in_ist():
     assert "14:00 IST" in facts_line(quote())         # 08:30 UTC
 
@@ -109,6 +123,12 @@ async def test_no_instrument_in_the_query_asks_which_one(agent, provider, llm):
 async def test_provider_crash_is_a_friendly_error_not_an_exception(llm):
     r = await MarketAnalysisAgent(FakeProvider(error=RuntimeError("yahoo 429")), llm=llm).run("Nifty today")
     assert r.status == "error" and "429" not in r.text and r.meta["retryable"] is True
+
+async def test_an_outage_is_a_retryable_error_with_no_internals(llm):
+    from src.data.market.base import ProviderUnavailable
+    r = await MarketAnalysisAgent(FakeProvider(error=ProviderUnavailable("yahoo 429 secret")), llm=llm).run("Nifty today")
+    assert r.status == "error" and r.meta["retryable"] is True and "429" not in r.text
+
 
 async def test_llm_failure_still_returns_the_numbers(provider, llm):
     llm.error = RuntimeError("quota")

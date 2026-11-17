@@ -10,3 +10,5 @@ chroma_db/
 src/web_app/node_modules/
 src/web_app/dist/
 .vectorstore/
+.coverage
+htmlcov/

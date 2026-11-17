@@ -75,7 +75,7 @@ def test_the_reply_has_the_documented_fields(client):
     res = client.get("/market/history", params={"symbol": "TCS", "range": "3m"})
     assert res.status_code == 200
     assert set(res.json()) == {"symbol", "name", "range", "currency", "source", "as_of", "points",
-                               "latest", "change_pct", "high", "low"}
+                               "latest", "change_pct", "high", "low", "stale", "age_seconds"}
 
 
 def test_the_numbers_are_computed_in_code(client):
@@ -83,6 +83,28 @@ def test_the_numbers_are_computed_in_code(client):
     assert body["latest"] == 105.0 and body["high"] == 110.0 and body["low"] == 100.0 and body["change_pct"] == 5.0
     assert body["points"][0] == {"date": "2026-08-03", "close": 100.0}
     assert body["source"] == "yfinance" and body["currency"] == "INR" and body["as_of"].startswith("2026-11-17")
+
+
+def test_the_reply_says_how_old_the_data_is_and_whether_it_is_fresh(client):
+    body = client.get("/market/history", params={"symbol": "TCS"}).json()
+    assert body["stale"] is False and isinstance(body["age_seconds"], int) and body["age_seconds"] > 0
+
+
+def test_stale_data_is_flagged_not_hidden():
+    p = FakeProvider()
+    p.result = make_history(Instrument(symbol="TCS"), "3m").model_copy(update={"stale": True})
+    c, _ = client_for(p)
+    with c:
+        body = c.get("/market/history", params={"symbol": "TCS"}).json()
+    assert body["stale"] is True and body["latest"] == 105.0
+
+
+def test_an_outage_with_nothing_cached_is_a_retryable_502():
+    from src.data.market.base import ProviderUnavailable
+    c, _ = client_for(FakeProvider(raises=ProviderUnavailable("rate limited")))
+    with c:
+        res = c.get("/market/history", params={"symbol": "TCS"})
+    assert res.status_code == 502 and "rate limited" not in res.text
 
 
 def test_the_range_defaults_to_three_months(client, provider):
@@ -193,5 +215,5 @@ def test_the_dev_server_origin_may_call_it(client):
 
 def test_the_openapi_description_names_the_reply_fields(client):
     schema = client.get("/openapi.json").json()["components"]["schemas"]["HistoryOut"]
-    assert {"symbol", "name", "range", "currency", "source", "as_of", "points", "latest", "change_pct", "high", "low"} \
-        <= set(schema["properties"])
+    assert {"symbol", "name", "range", "currency", "source", "as_of", "points", "latest", "change_pct", "high", "low",
+            "stale", "age_seconds"} <= set(schema["properties"])

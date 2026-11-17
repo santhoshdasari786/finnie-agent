@@ -12,6 +12,26 @@ def test_real_app_yaml_loads_with_expected_values():
     assert "place_order" not in cfg.mcp_server.expose_tools
 
 
+def test_the_market_cache_settings_have_sensible_defaults():
+    m = AppConfig().market_data
+    assert (m.cache_ttl_seconds, m.cache_max_entries, m.cache_max_stale_seconds) == (1800, 512, 86400)
+    assert (m.retries, m.retry_base_seconds, m.cooldown_seconds) == (2, 0.5, 30)
+
+
+def test_the_real_app_yaml_sets_the_cache():
+    m = load_app_config().market_data
+    assert m.cache_ttl_seconds == 1800 and m.retries == 2
+
+
+@pytest.mark.parametrize("bad", [
+    {"cache_ttl_seconds": -1}, {"cache_max_entries": 0}, {"cache_max_stale_seconds": -5},
+    {"retries": -1}, {"retries": 6}, {"retry_base_seconds": -0.1}, {"cooldown_seconds": -1},
+])
+def test_nonsense_cache_settings_are_rejected(bad):
+    with pytest.raises(ValidationError):
+        AppConfig.model_validate({"market_data": bad})
+
+
 @pytest.mark.parametrize(
     "bad",
     [

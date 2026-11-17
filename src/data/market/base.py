@@ -7,6 +7,12 @@ class MarketDataProvider(Protocol):
     async def history(self, instrument: Instrument, range: str) -> PriceHistory | None: ...
 
 
+class ProviderUnavailable(Exception):
+    """The source is temporarily unreachable (rate limit, network, timeout). Trying again later may work.
+
+    Not the same as "not found": an unknown symbol is an answer (None / no quote), never this."""
+
+
 PROVIDERS: dict[str, type] = {}
 
 def register_provider(name: str):

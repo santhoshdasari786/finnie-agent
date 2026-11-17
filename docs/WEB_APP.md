@@ -10,7 +10,7 @@ A chat front end for the HTTP API in [`API.md`](API.md). It is a separate npm pr
 cd src/web_app
 npm install
 npm run dev            # http://localhost:5173, expects the API on http://localhost:8000
-npm test               # 454 tests, no server needed
+npm test               # 477 tests, no server needed
 npm run build          # type check + production build (about 82 KB of JavaScript, gzipped)
 ```
 
@@ -55,6 +55,6 @@ Portfolio and Goals are views over the **same conversation** as the Chat tab, so
 - Replies arrive whole; there is no token streaming (backlog S1).
 - On a very narrow phone the five-column goal table scrolls sideways inside its card.
 - The Market chart has no hover tooltip yet; the numbers are in the chart's text name and the High / Low row.
-- Quotes and history are not cached yet (backlog), so every tab visit with a new symbol asks Yahoo.
+- Prices come from a server-side cache (30 minutes). The Market tab says how old they are ("updated 12 min ago") and shows a warning when the server could not refresh and is showing older prices.
 - The conversation is stored in the browser tab only; "New chat" in another tab is a separate conversation.
 - No authentication (see `API.md`).

@@ -28,3 +28,4 @@ class PriceHistory(BaseModel):
     points: list[PricePoint]                      # oldest first, one per trading day
     as_of: datetime
     source: str
+    stale: bool = False                           # an older copy, served because a refresh failed

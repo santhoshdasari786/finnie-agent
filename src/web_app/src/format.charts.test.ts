@@ -1,4 +1,4 @@
-import { compactMoney, formatDate, price } from "./format";
+import { compactMoney, formatAge, formatDate, price } from "./format";
 
 describe("compactMoney (axis labels)", () => {
   it.each([
@@ -64,5 +64,30 @@ describe("price (two decimals, because prices are not round)", () => {
 
   it("falls back to a plain number for an unknown currency", () => {
     expect(price(12.345, "???")).toBe("12.35");
+  });
+});
+
+describe("formatAge (how fresh the data is)", () => {
+  it.each([
+    [0, "just now"],
+    [1, "just now"],
+    [59, "just now"],
+    [60, "1 min ago"],
+    [125, "2 min ago"],
+    [3599, "59 min ago"],
+    [3600, "1 h ago"],
+    [7300, "2 h ago"],
+    [86399, "23 h ago"],
+    [86400, "1 d ago"],
+    [200000, "2 d ago"],
+  ])("%s seconds -> %s", (seconds, out) => expect(formatAge(seconds)).toBe(out));
+
+  it("treats a negative age (a clock a little behind) as just now", () => {
+    expect(formatAge(-30)).toBe("just now");
+  });
+
+  it("does not print nonsense for a value that is not a number", () => {
+    expect(formatAge(Number.NaN)).toBe("a while ago");
+    expect(formatAge(Number.POSITIVE_INFINITY)).toBe("a while ago");
   });
 });

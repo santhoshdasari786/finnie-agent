@@ -63,6 +63,9 @@ describe("marketHistory", () => {
     ["low", { low: null }],
     ["change", { change_pct: "x" }],
     ["source", { source: 1 }],
+    ["stale", { stale: "no" }],
+    ["age", { age_seconds: "old" }],
+    ["missing stale", { stale: undefined }],
   ])("rejects a reply with a bad %s", async (_, bad) => {
     const { fetch } = fakeFetch({ body: { ...makeHistory(), ...bad } });
     await expect(createApi(BASE, fetch).marketHistory("TCS", "3m")).rejects.toBeInstanceOf(ApiError);

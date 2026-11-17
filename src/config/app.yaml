@@ -13,7 +13,12 @@ workflow:
 
 market_data:
   providers: [yfinance, kite]   # priority order; alpha_vantage optional, last
-  cache_ttl_seconds: 1800
+  cache_ttl_seconds: 1800       # 30 minutes; 0 = no cache
+  cache_max_entries: 512
+  cache_max_stale_seconds: 86400 # serve an older copy (marked stale) when a refresh fails, up to a day
+  retries: 2                    # extra attempts after a rate limit or network error
+  retry_base_seconds: 0.5       # waits 0.5 s, then 1 s
+  cooldown_seconds: 30          # after a failed refresh, do not hammer the source
   default_exchange: NSE
 
 portfolio:

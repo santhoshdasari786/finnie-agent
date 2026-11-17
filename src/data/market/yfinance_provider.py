@@ -1,9 +1,11 @@
 import asyncio
 from datetime import datetime, timezone
 import yfinance as yf
-from src.data.market.base import register_provider
+from yfinance.exceptions import YFRateLimitError
+from src.data.market.base import ProviderUnavailable, register_provider
 from src.data.market.models import Instrument, PriceHistory, PricePoint, Quote
 
+_TRANSIENT = (YFRateLimitError, OSError)             # rate limit; network errors and timeouts (curl_cffi's and TimeoutError are OSErrors)
 _INDEXES = {"NIFTY50": "^NSEI", "SENSEX": "^BSESN"}      # canonical name -> Yahoo symbol
 
 def to_yahoo(i: Instrument) -> str:
@@ -21,6 +23,8 @@ def _fetch_one(i: Instrument) -> Quote | None:
         change = round((price - prev) / prev * 100, 2) if prev else None
         return Quote(instrument=i, price=round(float(price), 2), change_pct=change,
                      currency=fi["currency"], as_of=datetime.now(timezone.utc), source="yfinance")
+    except _TRANSIENT as e:
+        raise ProviderUnavailable(type(e).__name__) from e
     except Exception:
         return None
 
@@ -41,6 +45,8 @@ def _fetch_history(i: Instrument, rng: str) -> PriceHistory | None:
             currency = "INR"
         return PriceHistory(instrument=i, range=rng, currency=currency, points=points,
                             as_of=datetime.now(timezone.utc), source="yfinance")
+    except _TRANSIENT as e:
+        raise ProviderUnavailable(type(e).__name__) from e
     except Exception:
         return None
 
@@ -50,8 +56,12 @@ class YFinanceProvider:
     name = "yfinance"
 
     async def quotes(self, instruments: list[Instrument]) -> list[Quote]:
-        results = await asyncio.gather(*(asyncio.to_thread(_fetch_one, i) for i in instruments))
-        return [q for q in results if q is not None]
+        results = await asyncio.gather(*(asyncio.to_thread(_fetch_one, i) for i in instruments), return_exceptions=True)
+        quotes = [r for r in results if isinstance(r, Quote)]
+        down = [r for r in results if isinstance(r, ProviderUnavailable)]
+        if down and not quotes:
+            raise down[0]                                     # nothing came back and the source was in trouble: not "not found"
+        return quotes
 
     async def history(self, instrument: Instrument, range: str) -> PriceHistory | None:
         if range not in _PERIODS:

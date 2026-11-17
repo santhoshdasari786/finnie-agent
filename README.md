@@ -57,7 +57,8 @@ All six agents, the knowledge base, the guardrails, memory, the HTTP API, the Re
 | React web app | Done (Chat, Portfolio, Market and Goals tabs; hand-written SVG charts) |
 | MCP server for Claude Desktop (six read-only tools) | Done, verified over stdio |
 | Docker image (API) | Done |
-| Automated tests | **1,710 Python tests** at **85% line coverage**, plus **454 web-app tests** |
+| Automated tests | **1,812 Python tests** at **86% line coverage**, plus **477 web-app tests** |
+| Market data cache, retry with backoff and stale fallback | Done (30 min TTL, configurable) |
 
 ## Architecture
 
@@ -227,16 +228,17 @@ Status codes: `200` for every reply (including blocked or failed ones, see `stat
 | CORS origins for the API | `FINNIE_CORS_ORIGINS` | comma separated; defaults allow the Vite dev server |
 | Web app API address | `src/web_app/.env` | `VITE_API_URL`, see `src/web_app/.env.example` |
 | RAG (chunking, embedder, store, thresholds) | `src/config/rag.yaml` | |
+| Market data cache (TTL, retries, backoff, stale limit, cool-down) | `src/config/app.yaml`, `market_data` | `cache_ttl_seconds: 0` switches the cache off |
 | Tracing (optional) | `.env` | `LANGCHAIN_TRACING_V2`, `LANGCHAIN_API_KEY`, `LANGCHAIN_PROJECT` for LangSmith |
 
 ## Tests
 
 ```bash
-.venv/bin/python -m pytest tests -q                       # 1,710 passed
-cd src/web_app && npm test                                # 454 passed
+.venv/bin/python -m pytest tests -q                       # 1,812 passed
+cd src/web_app && npm test                                # 477 passed
 
 # coverage, without changing your environment:
-uv run --with pytest-cov python -m pytest tests -q --cov=src --cov-report=term     # 85%
+uv run --with pytest-cov python -m pytest tests -q --cov=src --cov-report=term     # 86%
 ```
 
 No test needs the network or a login: LLMs, data providers and the Kite client are replaced by recording fakes. A few scripts do use the real services on purpose; run them by hand:
@@ -320,7 +322,7 @@ ai_finance_assistant/
 - Replies arrive whole, not token by token.
 - The Market agent knows only the Nifty 50 and Sensex indexes, by name.
 - Educational content is a small seed set (15 articles plus a glossary); the 80-topic plan is in the [content backlog](docs/knowledge-base/content-backlog.md).
-- Market quotes are not cached yet.
+- The market cache lives in memory and is lost on restart; "not found" (a mistyped ticker) is not cached, so each try asks Yahoo again (backlog M8).
 
 The full list, with ids, is in [`docs/qa-agent-backlog.md`](docs/qa-agent-backlog.md).
 

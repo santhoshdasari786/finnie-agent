@@ -261,6 +261,7 @@ New implementation items from these docs:
 | M4 | `get_price_history` | the provider now has `history()` (2026-11-17, used by `GET /market/history`); exposing it as an MCP tool is the remaining step | P3 | open |
 | M5 | `search_knowledge_base` | raw passages; expose only with the input guard and a clear "source text, not advice" label | P3 | open |
 | M6 | HTTP transport for MCP | needs a per-client conversation id (the stdio default of one conversation per process would mix clients) | P3 | open |
+| M8 | Negative cache for unknown tickers | a mistyped ticker asks Yahoo every time (0.6 to 1.2 s); remember "not found" for about a minute. Persisting the cache across restarts is a separate, optional step | P3 | open |
 | M7 | Try it in Claude Desktop | manual: a concept question, a quote, a goal, the portfolio; screenshot for the demo | P2 | open |
 
 ## Suggested order

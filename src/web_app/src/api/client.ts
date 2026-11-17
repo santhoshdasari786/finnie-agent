@@ -40,6 +40,7 @@ function looksLikeHistory(x: unknown): x is MarketHistory {
   return (
     isStr(r.symbol) && isStr(r.name) && isStr(r.range) && isStr(r.currency) && isStr(r.source) && isStr(r.as_of) &&
     isNum(r.latest) && isNum(r.high) && isNum(r.low) && (r.change_pct === null || isNum(r.change_pct)) &&
+    typeof r.stale === "boolean" && isNum(r.age_seconds) &&
     Array.isArray(points) &&
     points.every((p) => typeof p === "object" && p !== null && isStr((p as Record<string, unknown>).date) && isNum((p as Record<string, unknown>).close))
   );

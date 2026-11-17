@@ -98,12 +98,42 @@ describe("MarketView: the numbers", () => {
     expect(screen.getByTestId("change")).toHaveTextContent("—");
   });
 
-  it("shows the high, the low, the source and the date", async () => {
+  it("shows the high, the low, the source and how fresh it is", async () => {
     setup();
     await screen.findByRole("heading", { name: "Nifty 50" });
     expect(screen.getByText("High").nextSibling).toHaveTextContent("₹110.00");
     expect(screen.getByText("Low").nextSibling).toHaveTextContent("₹100.00");
-    expect(screen.getByText(/Source: yfinance · 17 Nov 2026/)).toBeInTheDocument();
+    expect(screen.getByText("Source: yfinance · updated 10 min ago")).toBeInTheDocument();
+  });
+
+  it.each([[0, "just now"], [90, "1 min ago"], [7200, "2 h ago"], [172800, "2 d ago"]])("says %s seconds old as %s", async (age, words) => {
+    setup(async (symbol) => makeHistory({ symbol, name: "Nifty 50", age_seconds: age }));
+    expect(await screen.findByText(`Source: yfinance · updated ${words}`)).toBeInTheDocument();
+  });
+
+  it("does not warn when the prices are fresh", async () => {
+    setup();
+    await screen.findByRole("heading", { name: "Nifty 50" });
+    expect(screen.queryByText(/may be out of date/i)).toBeNull();
+    expect(screen.queryByRole("status")).toBeNull();
+  });
+
+  it("warns, but still shows the chart, when the prices are old because a refresh failed", async () => {
+    setup(async (symbol) => makeHistory({ symbol, name: "Nifty 50", stale: true, age_seconds: 5400 }));
+    await screen.findByRole("heading", { name: "Nifty 50" });
+    expect(screen.getByRole("status")).toHaveTextContent(/couldn't refresh the prices just now/i);
+    expect(screen.getByRole("status")).toHaveTextContent(/may be out of date/i);
+    expect(screen.getByRole("img", { name: /Nifty 50 closing price/ })).toBeInTheDocument();
+    expect(screen.getByText("Source: yfinance · updated 1 h ago")).toBeInTheDocument();
+  });
+
+  it("the warning goes away when fresh prices are loaded", async () => {
+    setup(async (symbol, range) => makeHistory({ symbol, name: symbol === "NIFTY50" ? "Nifty 50" : symbol, range, stale: symbol === "NIFTY50" }));
+    await screen.findByRole("heading", { name: "Nifty 50" });
+    expect(screen.getByRole("status")).toHaveTextContent(/out of date/i);
+    await userEvent.click(screen.getByRole("button", { name: "TCS" }));
+    await screen.findByRole("heading", { name: "TCS" });
+    expect(screen.queryByRole("status")).toBeNull();
   });
 
   it("draws the closing prices as a chart you can read without seeing it", async () => {

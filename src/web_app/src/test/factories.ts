@@ -43,7 +43,7 @@ export function makeHistory(over: Partial<MarketHistory> = {}): MarketHistory {
     symbol: "TCS", name: "TCS", range: "3m" as HistoryRange, currency: "INR", source: "yfinance",
     as_of: "2026-11-17T05:30:00+00:00",
     points: closes.map((close, i) => ({ date: `2026-08-${String(3 + i).padStart(2, "0")}`, close })),
-    latest: 110, change_pct: 10, high: 110, low: 100,
+    latest: 110, change_pct: 10, high: 110, low: 100, stale: false, age_seconds: 600,
     ...over,
   };
 }

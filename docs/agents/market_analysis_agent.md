@@ -100,4 +100,20 @@ Exponential backoff on rate-limit responses (`429`), falling through to the next
 
 ## Addition (2026-11-17): price history
 
-`MarketDataProvider.history(instrument, range)` returns a `PriceHistory` (daily closes, oldest first) or `None`; `range` is `1m`, `3m`, `6m` or `1y`. The yfinance provider asks for adjusted daily bars in a worker thread, drops NaN and non-positive closes, rounds to two decimals, and returns `None` for any failure or an empty table. `src/data/market/history.py` computes the summary (latest, high, low, change over the range) and `symbols.resolve_instrument` turns what a user typed into an `Instrument`. It feeds `GET /market/history` (see `docs/API.md`); the agent exposes its `provider` so the API can reach it. Not cached yet (see Step 3 of the review plan).
+`MarketDataProvider.history(instrument, range)` returns a `PriceHistory` (daily closes, oldest first) or `None`; `range` is `1m`, `3m`, `6m` or `1y`. The yfinance provider asks for adjusted daily bars in a worker thread, drops NaN and non-positive closes, rounds to two decimals, and returns `None` for any failure or an empty table. `src/data/market/history.py` computes the summary (latest, high, low, change over the range) and `symbols.resolve_instrument` turns what a user typed into an `Instrument`. It feeds `GET /market/history` (see `docs/API.md`); the agent exposes its `provider` so the API can reach it. It is cached (see the next section).
+
+## Addition (2026-11-17): cache, retry and stale fallback
+
+`build_agents` wraps the yfinance provider in `CachedProvider` (`src/data/market/cache.py`), so the Market agent, the Portfolio pricing step and `GET /market/history` all share one cache. Settings are in `src/config/app.yaml` under `market_data`.
+
+| Behaviour | Rule |
+|---|---|
+| Cache | per instrument for quotes, per instrument and range for history; `cache_ttl_seconds` (default 1800); least recently used out first beyond `cache_max_entries` (512). `0` switches the cache off |
+| What is a failure | `ProviderUnavailable`: a rate limit (`YFRateLimitError`) or a network error or timeout (an `OSError`). An unknown symbol is not a failure: it comes back as no quote / `None`, is **never cached and never retried** |
+| Retry | `retries` (2) more attempts, waiting `retry_base_seconds` (0.5), then double: 0.5 s, 1 s. Other exceptions are bugs and pass straight through |
+| Stale fallback | when every attempt fails and an older copy younger than `cache_max_stale_seconds` (a day) exists, it is returned with `stale: true` and its **original** `as_of`. The agent adds "could not refresh, may be out of date" to that price; the Market tab shows a warning. With nothing cached the outage is raised: an error reply with `retryable` for chat, HTTP 502 for history |
+| Cool-down | after a failed refresh, that key is left alone for `cooldown_seconds` (30): no attempts, no waiting |
+| Concurrency | identical requests in flight at once share one fetch, and one caller giving up does not cancel it for the others |
+| Honesty | a cache hit keeps the time the data was really fetched, so "fetched 14:05 IST" and "updated 12 min ago" are true, not the time of the request |
+
+Measured live: a cold quote 500 ms and a cached one 0.1 ms; a cold history 335 ms through the API and 1.3 ms cached; six identical concurrent history calls made one fetch.

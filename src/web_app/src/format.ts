@@ -51,6 +51,15 @@ export function compactMoney(n: number, currency: string): string {
   }
 }
 
+/** How old data is, in words: "just now", "12 min ago", "2 h ago", "3 d ago". */
+export function formatAge(seconds: number): string {
+  if (!Number.isFinite(seconds)) return "a while ago";
+  if (seconds < 60) return "just now";                                    // also a clock a little behind (negative)
+  if (seconds < 3600) return `${Math.floor(seconds / 60)} min ago`;
+  if (seconds < 86400) return `${Math.floor(seconds / 3600)} h ago`;
+  return `${Math.floor(seconds / 86400)} d ago`;
+}
+
 const MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
 
 /** "2026-08-17" (or a full timestamp) -> "17 Aug 2026". Reads the text, so the viewer's time zone cannot shift the day. */

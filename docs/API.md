@@ -38,10 +38,11 @@ Run it: `.venv/bin/python -m uvicorn src.main:app --reload --port 8000`, then op
 ```json
 { "symbol": "NIFTY50", "name": "Nifty 50", "range": "3m", "currency": "INR", "source": "yfinance",
   "as_of": "2026-11-17T16:42:07+00:00", "points": [{"date": "2026-08-17", "close": 24280.1}, ...],
-  "latest": 25387.4, "change_pct": 4.53, "high": 25387.4, "low": 22231.8 }
+  "latest": 25387.4, "change_pct": 4.53, "high": 25387.4, "low": 22231.8,
+  "stale": false, "age_seconds": 612 }
 ```
 
-`latest`, `high`, `low` and `change_pct` (first close to last) are computed in code, so the browser does no arithmetic. Errors: **422** for a symbol we cannot resolve (`^GSPC`, `TCS.NS`) or a range outside the four; **404** `{"error": ...}` when there is no usable data (unknown ticker, fewer than 2 points); **502** `{"error": ...}` when the provider fails (the cause is logged, never returned); **503** when the server has no market provider with history.
+`stale` is true when Yahoo could not be reached and an older copy is being served; `age_seconds` is how long ago the data was really fetched (a cache hit keeps its original time). `latest`, `high`, `low` and `change_pct` (first close to last) are computed in code, so the browser does no arithmetic. Errors: **422** for a symbol we cannot resolve (`^GSPC`, `TCS.NS`) or a range outside the four; **404** `{"error": ...}` when there is no usable data (unknown ticker, fewer than 2 points); **502** `{"error": ...}` when the provider is unreachable and nothing older is cached (the cause is logged, never returned); **503** when the server has no market provider with history.
 
 ## Design
 

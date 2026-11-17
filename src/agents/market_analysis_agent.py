@@ -18,7 +18,8 @@ SYSTEM = ("You explain market data to a beginner in 2-4 plain sentences. Use ONL
 def facts_line(q) -> str:
     chg = f"{q.change_pct:+.2f}%" if q.change_pct is not None else "change n/a"
     when = q.as_of.astimezone(IST).strftime("%d %b %H:%M IST")
-    return f"- {q.instrument.symbol}: {q.price:,.2f} {q.currency} ({chg}) · {q.source}, fetched {when}"
+    note = " · could not refresh, may be out of date" if q.stale else ""
+    return f"- {q.instrument.symbol}: {q.price:,.2f} {q.currency} ({chg}) · {q.source}, fetched {when}{note}"
 
 
 class MarketAnalysisAgent:

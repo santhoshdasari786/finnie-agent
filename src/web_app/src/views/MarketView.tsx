@@ -2,7 +2,7 @@ import { useEffect, useState, type FormEvent } from "react";
 import { ApiError, type Api } from "../api/client";
 import type { HistoryRange, MarketHistory } from "../api/types";
 import { LineChart } from "../charts/LineChart";
-import { compactMoney, formatDate, price, sign, signedPct } from "../format";
+import { compactMoney, formatAge, formatDate, price, sign, signedPct } from "../format";
 
 const PRESETS = [
   { label: "Nifty 50", symbol: "NIFTY50" }, { label: "Sensex", symbol: "SENSEX" }, { label: "RELIANCE", symbol: "RELIANCE" },
@@ -113,6 +113,11 @@ function Ready({ data }: { data: MarketHistory }) {
   const change = data.change_pct;
   return (
     <div className={`${card} space-y-4`}>
+      {data.stale && (
+        <p role="status" className="rounded-lg border border-amber-300 bg-amber-50 px-3 py-2 text-sm text-amber-900 dark:border-amber-700 dark:bg-amber-950/40 dark:text-amber-200">
+          Couldn't refresh the prices just now, so these may be out of date.
+        </p>
+      )}
       <div className="flex flex-wrap items-baseline gap-x-4 gap-y-1">
         <h2 className="text-xl font-semibold">{data.name}</h2>
         <p data-testid="latest" className="text-2xl font-semibold">{price(data.latest, data.currency)}</p>
@@ -131,7 +136,7 @@ function Ready({ data }: { data: MarketHistory }) {
         <div><dt className="text-slate-500 dark:text-slate-400">High</dt><dd className="font-medium">{price(data.high, data.currency)}</dd></div>
         <div><dt className="text-slate-500 dark:text-slate-400">Low</dt><dd className="font-medium">{price(data.low, data.currency)}</dd></div>
       </dl>
-      <p className="text-xs text-slate-500 dark:text-slate-400">Source: {data.source} · {formatDate(data.as_of)}</p>
+      <p className="text-xs text-slate-500 dark:text-slate-400">Source: {data.source} · updated {formatAge(data.age_seconds)}</p>
       <p className="text-xs text-slate-500 dark:text-slate-400">Prices can be delayed. For education only, not financial advice.</p>
     </div>
   );

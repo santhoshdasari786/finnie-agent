@@ -68,3 +68,5 @@ class HistoryOut(BaseModel):
     change_pct: float | None
     high: float
     low: float
+    stale: bool
+    age_seconds: int

@@ -11,7 +11,9 @@ from src.workflow.graph import build_graph
 from src.workflow.state import AGENT_NAMES
 
 from src.agents.market_analysis_agent import MarketAnalysisAgent
+from src.core.config import load_app_config
 from src.data.market.base import PROVIDERS
+from src.data.market.cache import build_market_provider
 import src.data.market.yfinance_provider  # noqa: F401  (importing registers "yfinance")
 import src.data.portfolio.sample  # noqa: F401  (importing registers "sample" in the portfolio SOURCES registry)
 import src.data.portfolio.kite  # noqa: F401  (importing registers "kite" in the portfolio SOURCES registry)
@@ -37,7 +39,7 @@ class _Pending:
 
 def build_agents(store: ConnectionStore | None = None) -> dict:
     agents = {n: _Pending(n) for n in AGENT_NAMES}
-    provider = PROVIDERS["yfinance"]()
+    provider = build_market_provider(PROVIDERS["yfinance"](), load_app_config().market_data)    # cache, retry, stale fallback
     rag = build_rag()      # build the embedder and Chroma store ONCE; both agents share them
     shared = dict(retriever=rag.retriever, glossary=rag.glossary, settings=rag.settings)
     agents["finance_qa"] = FinanceQAAgent(**shared)

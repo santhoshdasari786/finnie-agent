@@ -31,7 +31,12 @@ class WorkflowCfg(_Strict):
 
 class MarketDataCfg(_Strict):
     providers: list[Literal["yfinance", "kite", "alpha_vantage"]] = ["yfinance", "kite"]
-    cache_ttl_seconds: int = 1800
+    cache_ttl_seconds: int = Field(1800, ge=0)               # 0 switches the cache off
+    cache_max_entries: int = Field(512, ge=1)
+    cache_max_stale_seconds: int = Field(86400, ge=0)        # how old a copy may be and still be served when a refresh fails
+    retries: int = Field(2, ge=0, le=5)                      # extra attempts after a temporary failure
+    retry_base_seconds: float = Field(0.5, ge=0)             # waits base, 2*base, 4*base ...
+    cooldown_seconds: int = Field(30, ge=0)                  # after a failed refresh, leave that key alone this long
     default_exchange: str = "NSE"
 
 class PortfolioCfg(_Strict):

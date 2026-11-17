@@ -12,7 +12,7 @@ Contract
   summarize(history) -> dict                                      latest, high, low and the change over the range, in code
 """
 import threading
-from datetime import date, datetime, timezone
+from datetime import date, datetime, timedelta, timezone
 
 import pandas as pd
 import pytest
@@ -206,7 +206,7 @@ def history(closes, currency="INR", rng="3m"):
 async def test_summary_has_the_fields_the_chart_needs():
     s = summarize(history([100.0, 110.0, 105.0]))
     assert set(s) == {"symbol", "name", "range", "currency", "source", "as_of", "points",
-                      "latest", "change_pct", "high", "low"}
+                      "latest", "change_pct", "high", "low", "stale", "age_seconds"}
 
 
 async def test_summary_numbers():
@@ -238,6 +238,39 @@ async def test_summary_labels_come_from_the_history():
     n = PriceHistory(instrument=NIFTY, range="1m", currency="INR", source="yfinance", as_of=datetime.now(timezone.utc),
                      points=[PricePoint(date=date(2026, 8, 3), close=1.0)])
     assert (summarize(n)["symbol"], summarize(n)["name"]) == ("NIFTY50", "Nifty 50")
+
+
+# ---------------------------------------------------------------- freshness
+AS_OF = datetime(2026, 11, 17, 5, 30, tzinfo=timezone.utc)
+
+
+async def test_age_is_how_long_ago_the_data_was_fetched():
+    s = summarize(history([100.0, 110.0]), now=AS_OF + timedelta(minutes=12, seconds=10))
+    assert s["age_seconds"] == 730
+
+
+async def test_age_is_never_negative():
+    assert summarize(history([100.0, 110.0]), now=AS_OF - timedelta(seconds=5))["age_seconds"] == 0
+
+
+async def test_age_is_a_whole_number_of_seconds():
+    s = summarize(history([100.0, 110.0]), now=AS_OF + timedelta(seconds=90, milliseconds=900))
+    assert s["age_seconds"] == 90 and isinstance(s["age_seconds"], int)
+
+
+async def test_age_defaults_to_now():
+    s = summarize(history([100.0, 110.0]))
+    assert s["age_seconds"] > 0                                  # as_of is in the past
+
+
+async def test_a_fresh_history_is_not_stale_and_a_stale_one_says_so():
+    h = history([100.0, 110.0])
+    assert summarize(h)["stale"] is False
+    assert summarize(h.model_copy(update={"stale": True}))["stale"] is True
+
+
+async def test_a_history_is_fresh_by_default():
+    assert history([1.0, 2.0]).stale is False
 
 
 async def test_a_single_point_has_no_change():

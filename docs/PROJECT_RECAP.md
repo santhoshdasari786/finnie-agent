@@ -1,6 +1,6 @@
 # Finnie: project recap (end to end, as of 2026-11-16)
 
-Finnie is a multi-agent personal-finance **education** assistant. All six agents in the spec are working. State of the tests: **1710 passed, 15 xfailed, 85% line coverage** (plus 454 in the web app). An HTTP API (`POST /chat` and friends, see `docs/API.md`) sits in front of the graph, an MCP server (`src/mcp_server/`, see `docs/agents/mcp_server.md`) exposes six read-only tools to Claude Desktop, and a React front end (`src/web_app/`, see `docs/WEB_APP.md`, 454 tests; four tabs: Chat, Portfolio, Market, Goals, with SVG charts) talks to it.
+Finnie is a multi-agent personal-finance **education** assistant. All six agents in the spec are working. State of the tests: **1812 passed, 15 xfailed, 86% line coverage** (plus 477 in the web app). An HTTP API (`POST /chat` and friends, see `docs/API.md`) sits in front of the graph, an MCP server (`src/mcp_server/`, see `docs/agents/mcp_server.md`) exposes six read-only tools to Claude Desktop, and a React front end (`src/web_app/`, see `docs/WEB_APP.md`, 477 tests; four tabs: Chat, Portfolio, Market, Goals, with SVG charts) talks to it.
 
 ## 1. The request path
 

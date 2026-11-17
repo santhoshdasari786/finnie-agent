@@ -68,4 +68,6 @@ export interface MarketHistory {
   change_pct: number | null;
   high: number;
   low: number;
+  stale: boolean;
+  age_seconds: number;
 }
