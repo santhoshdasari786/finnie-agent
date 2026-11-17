@@ -2,6 +2,7 @@
 #   in_kb      clearly covered by an article        -> must NOT be refused; `expect` = article_id that should rank first
 #   borderline finance-related, probably not covered -> informational: shows where the grey zone sits
 #   off_topic  not answerable from the KB at all     -> must be refused (no_source)
+#   routed_to_market  live prices: the router answers these before retrieval is consulted
 # Edit freely: wrong `expect` values are findings, not mistakes. Add a question, re-run, read the table.
 
 in_kb:
@@ -36,6 +37,80 @@ in_kb:
   - { q: "How does a SIP work?",                                          expect: sips-and-periodic-investing }
   - { q: "What is rupee-cost averaging and does it guarantee profit?",    expect: sips-and-periodic-investing }
 
+  # ---- added 2026-11-17 with the 36 new articles (two natural questions each) ----
+  - { q: "What is the difference between saving and investing?", expect: investing-vs-saving-vs-speculating }
+  - { q: "Is buying a stock for a quick gain investing or speculating?", expect: investing-vs-saving-vs-speculating }
+  - { q: "What is the difference between the primary market and the secondary market?", expect: how-financial-markets-work }
+  - { q: "Does the company get my money when I buy its shares on the exchange?", expect: how-financial-markets-work }
+  - { q: "What are the main asset classes?", expect: asset-classes-overview }
+  - { q: "How are equity and debt different as types of investment?", expect: asset-classes-overview }
+  - { q: "What does it mean to rebalance a portfolio?", expect: portfolio-rebalancing }
+  - { q: "Why does the equity share of my portfolio drift above my target mix?", expect: portfolio-rebalancing }
+  - { q: "What is the difference between risk tolerance and risk capacity?", expect: risk-tolerance-vs-risk-capacity }
+  - { q: "Can someone be comfortable with risk but unable to afford a loss?", expect: risk-tolerance-vs-risk-capacity }
+  - { q: "Is a falling share price the same as losing my money for good?", expect: volatility-vs-permanent-loss }
+  - { q: "What makes an investment loss permanent instead of temporary?", expect: volatility-vs-permanent-loss }
+  - { q: "What is a benchmark index and why is a fund compared with it?", expect: benchmarks-and-market-indices }
+  - { q: "Can I invest directly in the Sensex or the Nifty?", expect: benchmarks-and-market-indices }
+  - { q: "What does owning a share of a company actually mean?", expect: stocks-and-shares }
+  - { q: "What accounts do I need to buy shares in India?", expect: stocks-and-shares }
+  - { q: "What happens after I place an order to buy shares?", expect: how-stock-exchanges-work }
+  - { q: "What is a contract note and when do the shares reach my demat account?", expect: how-stock-exchanges-work }
+  - { q: "How do dividends work and what is the ex-dividend date?", expect: dividends }
+  - { q: "What does dividend yield tell me about a share?", expect: dividends }
+  - { q: "What does a credit rating of AAA mean for a bond?", expect: credit-risk-and-credit-ratings }
+  - { q: "Does a high credit rating guarantee that I will be repaid?", expect: credit-risk-and-credit-ratings }
+  - { q: "What are government securities and treasury bills?", expect: government-securities }
+  - { q: "How can an individual buy government securities in India?", expect: government-securities }
+  - { q: "How does a recurring deposit differ from a fixed deposit?", expect: fixed-and-recurring-deposits }
+  - { q: "What happens if I break a fixed deposit before it matures?", expect: fixed-and-recurring-deposits }
+  - { q: "What are the main categories of mutual funds?", expect: equity-debt-hybrid-funds }
+  - { q: "What does a hybrid mutual fund invest in?", expect: equity-debt-hybrid-funds }
+  - { q: "What is the difference between an index fund and an actively managed fund?", expect: index-vs-active-funds }
+  - { q: "Do actively managed funds always beat index funds?", expect: index-vs-active-funds }
+  - { q: "What are the different ways to invest in gold in India?", expect: gold-as-an-investment }
+  - { q: "Is a gold ETF different from digital gold?", expect: gold-as-an-investment }
+  - { q: "How do PPF, EPF and NPS differ from each other?", expect: ppf-epf-nps }
+  - { q: "How long does a PPF account run before it matures?", expect: ppf-epf-nps }
+  - { q: "What charges do I pay when I trade shares besides brokerage?", expect: brokerage-stt-and-trading-charges }
+  - { q: "Why must a share price rise before I break even on a trade?", expect: brokerage-stt-and-trading-charges }
+  - { q: "What is the difference between direct and regular mutual fund plans?", expect: direct-vs-regular-plans }
+  - { q: "Why does a direct plan have a lower expense ratio than a regular plan?", expect: direct-vs-regular-plans }
+  - { q: "What is an exit load in a mutual fund?", expect: exit-loads-and-lock-ins }
+  - { q: "What is the difference between a lock-in period and an exit load?", expect: exit-loads-and-lock-ins }
+  - { q: "Are dividends taxable in India?", expect: dividend-income-and-taxation }
+  - { q: "How does tax deducted at source work on dividend income?", expect: dividend-income-and-taxation }
+  - { q: "What is the difference between tax planning and tax evasion?", expect: tax-planning-vs-tax-evasion }
+  - { q: "Is tax avoidance legal in India?", expect: tax-planning-vs-tax-evasion }
+  - { q: "How do I compare investment returns after tax?", expect: pre-tax-vs-post-tax-returns }
+  - { q: "Why can a lower advertised return leave me with more money after tax?", expect: pre-tax-vs-post-tax-returns }
+  - { q: "What are common behavioural biases that affect investors?", expect: cognitive-biases }
+  - { q: "What is the disposition effect?", expect: cognitive-biases }
+  - { q: "What is FOMO in investing and how do market bubbles form?", expect: fomo-and-herd-behaviour }
+  - { q: "Why is it risky to buy something just because everyone else is buying it?", expect: fomo-and-herd-behaviour }
+  - { q: "Why do investors panic sell when markets fall?", expect: loss-aversion-and-panic-selling }
+  - { q: "What is loss aversion?", expect: loss-aversion-and-panic-selling }
+  - { q: "What is the difference between a market correction and a bear market?", expect: corrections-bear-markets-and-recovery }
+  - { q: "Why does a 50 percent loss need a 100 percent gain to recover?", expect: corrections-bear-markets-and-recovery }
+  - { q: "What is a margin call?", expect: leverage-and-margin }
+  - { q: "How does borrowing money to invest magnify losses?", expect: leverage-and-margin }
+  - { q: "Does a fund's past performance guarantee future returns?", expect: past-performance-and-survivorship-bias }
+  - { q: "What is survivorship bias in mutual fund returns?", expect: past-performance-and-survivorship-bias }
+  - { q: "Which regulator oversees banks and which oversees the stock market in India?", expect: indian-financial-regulators }
+  - { q: "What do SEBI, RBI, IRDAI and PFRDA each regulate?", expect: indian-financial-regulators }
+  - { q: "How can I check whether a stock broker or investment adviser is SEBI registered?", expect: verifying-a-financial-intermediary }
+  - { q: "What are the red flags of an unregistered investment adviser?", expect: verifying-a-financial-intermediary }
+  - { q: "How much of my bank deposit is insured in India?", expect: deposit-insurance-dicgc }
+  - { q: "Are my deposits in two different banks insured separately?", expect: deposit-insurance-dicgc }
+  - { q: "How can I keep my demat and bank accounts safe from fraud?", expect: protecting-accounts-and-data }
+  - { q: "Should I ever share an OTP with someone claiming to be from my bank?", expect: protecting-accounts-and-data }
+  - { q: "How do I file a complaint against my stock broker with SEBI?", expect: investor-grievance-channels }
+  - { q: "What is SCORES and when can I use it?", expect: investor-grievance-channels }
+  - { q: "If I invest 5000 rupees every month, how much could it grow to under an assumed return?", expect: monthly-investing-worked-example }
+  - { q: "Show me a worked example of monthly investing over 10 and 20 years.", expect: monthly-investing-worked-example }
+  - { q: "Show me with numbers how a bond's price changes when interest rates rise.", expect: bond-price-change-worked-example }
+  - { q: "Why does a longer bond lose more value than a shorter one when rates go up?", expect: bond-price-change-worked-example }
+
 borderline:
   - { q: "What is the current LTCG tax rate on equity mutual funds?" }
   - { q: "Which mutual fund should I buy this year?" }
@@ -52,10 +127,18 @@ off_topic:
   - { q: "What is the weather in Mumbai today?" }
   - { q: "Who won the cricket match yesterday?" }
   - { q: "Give me a recipe for paneer butter masala" }
-  - { q: "What was the Nifty 50 close yesterday?" }
-  - { q: "What is the share price of Reliance right now?" }
   - { q: "What is the price of Bitcoin today?" }
   - { q: "What is the capital of France?" }
   - { q: "Write a Python function to reverse a string" }
   - { q: "Translate good morning into Hindi" }
   - { q: "How do I fix a flat bicycle tyre?" }
+  - { q: "Which stock will double in the next month?" }
+
+# Price and "close" questions never reach retrieval: the router sends them to the Market agent by rule.
+# tests/kb/knowledge_base_test.py proves that offline. (Retrieval alone WOULD answer them with the index explainer,
+# at 0.687, above the 0.66 threshold: that is why they are a routing matter, not a retrieval one.)
+routed_to_market:
+  - { q: "What was the Nifty 50 close yesterday?" }
+  - { q: "What is the share price of Reliance right now?" }
+  - { q: "What was the Sensex at the close of trading today?" }
+  - { q: "What is the live price of the Nifty Bank index?" }

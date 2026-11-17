@@ -1,8 +1,8 @@
 ---
 article_id: capital-gains-tax-basics-india
-title: Capital Gains Tax Basics in India
+title: "Capital Gains Tax Basics in India"
 topic: costs-taxes
-summary: The structural concepts behind how capital gains are taxed in India — holding-period classification and asset-type differences — without stating specific current rates, which change with each Union Budget.
+summary: "The structural concepts behind how capital gains are taxed in India — holding-period classification and asset-type differences — without stating specific current rates, which change with each Union Budget."
 source_urls:
   - https://www.incometaxindia.gov.in/w/tax-on-long-term-capital-gains
 claim_sources: {}

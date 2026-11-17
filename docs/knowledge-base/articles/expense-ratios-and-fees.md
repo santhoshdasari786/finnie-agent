@@ -1,8 +1,8 @@
 ---
 article_id: expense-ratios-and-fees
-title: Expense Ratios and the Impact of Fees
+title: "Expense Ratios and the Impact of Fees"
 topic: costs-taxes
-summary: How recurring fees quietly compound against an investor over time, and what the expense ratio specifically covers.
+summary: "How recurring fees quietly compound against an investor over time, and what the expense ratio specifically covers."
 source_urls:
   - https://www.amfiindia.com/uploads/AMFI_Understanding_Mutual_Funds_IAP_Booklet_Final_Website_version_860a5b77aa.pdf
 claim_sources: {}

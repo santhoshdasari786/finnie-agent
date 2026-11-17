@@ -1,8 +1,8 @@
 ---
 article_id: cagr-vs-xirr
-title: CAGR vs. XIRR vs. Absolute Returns
+title: "CAGR vs. XIRR vs. Absolute Returns"
 topic: growth-portfolio
-summary: Three different ways to measure investment return, when each one applies, and why picking the wrong one gives a misleading number.
+summary: "Three different ways to measure investment return, when each one applies, and why picking the wrong one gives a misleading number."
 source_urls:
   - https://zerodha.com/varsity/chapter/measuring-mutual-fund-returns/
 claim_sources: {}

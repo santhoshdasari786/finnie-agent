@@ -1,9 +1,10 @@
 ---
 article_id: comparing-investment-products-fairly
-title: How to Compare Two Investment Products Fairly
+title: "How to Compare Two Investment Products Fairly"
 topic: costs-taxes
-summary: A structured framework for comparing two investment options on equal terms — risk, fees, liquidity, taxation, tenure, and comparable return periods — instead of comparing a single headline number.
-source_urls: []
+summary: "A structured framework for comparing two investment options on equal terms — risk, fees, liquidity, taxation, tenure, and comparable return periods — instead of comparing a single headline number."
+source_urls:
+  - https://investor.sebi.gov.in/pdf/downloadable-documents/Financial%20Education%20Booklet%20-%20English.pdf
 claim_sources: {}
 jurisdiction: global
 risk_level: normal
@@ -55,6 +56,8 @@ Looking only at "8% vs. 10%" would favor Product B — but once risk, fees, liqu
 - A fair comparison framework doesn't produce a universal "winner" — the right product depends on the individual's goals, horizon, and risk capacity, which is why this agent stays descriptive (explaining the framework) rather than prescriptive (telling someone which to pick).
 
 ## Source References
+
+- [Financial Education Booklet, SEBI (2020) (PDF)](https://investor.sebi.gov.in/pdf/downloadable-documents/Financial%20Education%20Booklet%20-%20English.pdf) (added 2026-11-17, **directly fetched and read**): the "three pillars of investment" (safety, liquidity, return) and the savings-vs-investment comparison support the idea that products must be compared on several dimensions, not one number.
 
 No single dedicated "how to compare two products" primary-source page was found — this article instead synthesizes the risk/fee/liquidity/tax/tenure dimensions from the individual concept articles it links to, each of which has its own, separately verified sourcing (see `risk-vs-return.md`, `expense-ratios-and-fees.md`, `cagr-vs-xirr.md`, `capital-gains-tax-basics-india.md`). The two Investor.gov URLs previously listed here were removed from `source_urls` as not independently fetch-confirmed and not load-bearing for this article's specific synthesis claims.
 

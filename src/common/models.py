@@ -18,6 +18,7 @@ class QASettings:
         "Could you ask about a concept such as risk, returns, fees, taxes or asset allocation?"
     )
     error_message: str = "Sorry, I couldn't put an answer together just now. Please try again in a moment."
+    busy_message: str = "My knowledge base is busy right now, so I can't look that up. Please try again in a few minutes."
 
 
     @classmethod

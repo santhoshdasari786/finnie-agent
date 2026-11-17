@@ -2,9 +2,9 @@ import re
 
 _LEAD = re.compile(
     r"^(?:what\s+is|what\s+are|what's|whats|define|definition\s+of|"
-    r"meaning\s+of|explain|tell\s+me\s+about)\s+", re.I)
+    r"meaning\s+of|explain|tell\s+me\s+about)(?:\s+|$)", re.I)
 _MEANS = re.compile(r"^what\s+does\s+(.+?)\s+mean$", re.I)
-_ARTICLE = re.compile(r"^(?:a|an|the)\s+", re.I)
+_ARTICLE = re.compile(r"^(?:a|an|the)(?:\s+|$)", re.I)
 
 MAX_TERM_WORDS = 5          # longer → it's a real question, not a term
 

@@ -203,6 +203,16 @@ These should be encoded directly in the Finance Q&A and Tax Education agents' sy
 
 ---
 
+## 6b. Status after the 2026-11-17 expansion: 51 of 80 articles
+
+The starter set below (15) was extended with **36 more articles** covering the remaining product, cost, tax, behaviour, safety and worked-example topics, plus a **93-term glossary** (it was 4). Topics now: foundations 7 · growth-portfolio 7 · products 13 · costs-taxes 9 · behaviour-risk 7 · safety-regulation 6 · worked-examples 2 (counts include the older set; run `ls docs/knowledge-base/articles` for the truth).
+
+**How they were checked (honest account).** Each article's *Source References* and *Review Metadata* say exactly what was read. In this pass the following were **fetched and read as page or PDF text**: SEBI's Financial Education Booklet (2020) and Beginner's Guide, the BSE and AMFI investor booklets (AMFI's carries the SEBI Master Circular of 20 March 2026), the DICGC FAQ page (read in full), SEBI's caution-to-investors page, the SCORES portal, SEBI's credit-rating FAQ (March 2026), the RBI complaint portal home page, and the SEC's behaviour, margin and asset-allocation pages. **Read only as search summaries** (the site blocked automated reading or the page did not render): the Income Tax Department pages (dividend TDS, penalties, anti-avoidance), RBI Retail Direct, the NSI PPF page, EPFO's FAQ, the newer PFRDA exit rule, SEBI's gold-exchange FAQ, SMART ODR and IRDAI's Bima Bharosa. Those claims are labelled as such inside each article. Figures were computed in code for every worked example. **No qualified human has reviewed any of it.**
+
+**Rules enforced by `tests/kb/knowledge_base_test.py`** (offline, instant): complete and valid front matter, the same sections in every article, a note on how sources were checked, no "you should buy/sell" wording, time-sensitive articles must say to verify and may quote no figures outside their worked example, every `related_articles` id exists, at least 50 articles, every article has a retrieval question, glossary entries complete and unambiguous. It found real problems on its first run: a colon in a title that made the YAML invalid, a placeholder link, and two older articles with no linkable source.
+
+**Retrieval measured live (embedding model gemini-embedding-2, threshold 0.66):** 102 in-knowledge-base questions, expected article in the top 3 for **102 of 102** and ranked first for 96; lowest in-KB score 0.718; highest off-topic score 0.652. Price questions ("Sensex close today") score 0.687 against the new index article, above the threshold, but they never reach retrieval: the router sends them to the Market agent, which `tests/kb` proves offline. Before the expansion the gap was +0.119 (0.739 vs 0.620); it is now +0.066, so adding content narrows it. Watch it as the knowledge base grows.
+
 ## 7. Build-First Set — Drafted
 
 Don't curate all 80 before testing the agent. This starter set is now **drafted** (AI-written, unverified — see each file's Review Metadata) under [`articles/`](articles/), mapped back to the full list above for traceability:

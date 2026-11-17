@@ -1,9 +1,10 @@
 ---
 article_id: reading-a-mutual-fund-factsheet
-title: Reading a Mutual Fund Factsheet
+title: "Reading a Mutual Fund Factsheet"
 topic: safety-regulation
-summary: How to navigate a mutual fund factsheet section by section — objective, benchmark, holdings, expenses, and risk disclosures — to evaluate a fund on its own terms.
+summary: "How to navigate a mutual fund factsheet section by section — objective, benchmark, holdings, expenses, and risk disclosures — to evaluate a fund on its own terms."
 source_urls:
+  - https://www.amfiindia.com/uploads/AMFI_Understanding_Mutual_Funds_IAP_Booklet_Final_Website_version_860a5b77aa.pdf
   - "SEBI circular SEBI/HO/IMD/DF3/CIR/P/2020/197, dated 2020-10-05 (riskometer framework — identify and confirm exact URL on sebi.gov.in)"
   - "SEBI circular SEBI/HO/IMD/PoD1/CIR/P/2024/150, dated 2024-11-05 (riskometer amendment — identify and confirm exact URL on sebi.gov.in)"
 claim_sources: {}
@@ -53,6 +54,8 @@ A simple review checklist when reading any factsheet:
 - A single period's outperformance (e.g. "best returns last year") is a weak signal on its own — check consistency across multiple periods, not just the most recent one.
 
 ## Source References
+
+- [Mutual Funds Made Simple, AMFI investor education booklet (PDF)](https://www.amfiindia.com/uploads/AMFI_Understanding_Mutual_Funds_IAP_Booklet_Final_Website_version_860a5b77aa.pdf) (added 2026-11-17, **directly fetched and read**): confirms that schemes carry a risk-o-meter label and defines NAV, base expense ratio, total expense ratio, exit load and the benchmark. The SEBI Financial Education Booklet (2020) also describes the risk-o-meter and its six levels, from Low to Very High.
 
 Identified via search, **not yet confirmed by direct fetch** — a human reviewer should locate and attach the exact sebi.gov.in circular URLs before this is considered sourced:
 - SEBI circular **SEBI/HO/IMD/DF3/CIR/P/2020/197** (5 Oct 2020) — introduced the current riskometer framework, monthly recalculation requirement, and where it must be disclosed (SID/KIM, application forms, product labels, advertisements)

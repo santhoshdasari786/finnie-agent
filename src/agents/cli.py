@@ -48,4 +48,5 @@ async def main():
         await store.close_all()                # closes the Kite connection and its localhost callback server
 
 
-asyncio.run(main())
+if __name__ == "__main__":
+    asyncio.run(main())

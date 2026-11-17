@@ -1,8 +1,8 @@
 ---
 article_id: asset-allocation
-title: What Is Asset Allocation?
+title: "What Is Asset Allocation?"
 topic: growth-portfolio
-summary: How the mix of equity, debt, cash, and other assets in a portfolio shapes its overall risk and return — the decision that matters more than picking individual securities.
+summary: "How the mix of equity, debt, cash, and other assets in a portfolio shapes its overall risk and return — the decision that matters more than picking individual securities."
 source_urls:
   - https://www.investor.gov/introduction-investing/investing-basics/glossary/asset-allocation
   - https://www.investor.gov/introduction-investing/getting-started/asset-allocation

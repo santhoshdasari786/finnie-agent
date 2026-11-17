@@ -1,8 +1,8 @@
 ---
 article_id: mutual-funds-and-etfs
-title: Mutual Funds and ETFs
+title: "Mutual Funds and ETFs"
 topic: products
-summary: What a mutual fund and an ETF actually are structurally, how they're priced and traded differently, and when each form might apply.
+summary: "What a mutual fund and an ETF actually are structurally, how they're priced and traded differently, and when each form might apply."
 source_urls:
   - https://www.amfiindia.com/uploads/AMFI_Understanding_Mutual_Funds_IAP_Booklet_Final_Website_version_860a5b77aa.pdf
   - https://www.nseindia.com/static/products-services/etfs-structure

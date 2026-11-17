@@ -1,8 +1,8 @@
 ---
 article_id: compound-interest
-title: What Is Compounding?
+title: "What Is Compounding?"
 topic: foundations
-summary: How investment growth accumulates on both the original principal and previously earned returns, and why time matters more than most people expect.
+summary: "How investment growth accumulates on both the original principal and previously earned returns, and why time matters more than most people expect."
 source_urls:
   - https://www.investor.gov/introduction-investing/investing-basics/glossary/compound-interest
   - https://www.investor.gov/additional-resources/information/youth/teachers-classroom-resources/what-compound-interest

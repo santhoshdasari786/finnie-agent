@@ -1,8 +1,8 @@
 ---
 article_id: bonds-and-interest-rate-risk
-title: Bonds and Interest-Rate Risk
+title: "Bonds and Interest-Rate Risk"
 topic: products
-summary: What a bond actually is, how its market price moves as interest rates change, and why "fixed income" doesn't mean "fixed value."
+summary: "What a bond actually is, how its market price moves as interest rates change, and why \"fixed income\" doesn't mean \"fixed value.\""
 source_urls:
   - https://www.rbi.org.in/commonman/english/scripts/FAQs.aspx?Id=711
   - https://www.investor.gov/introduction-investing/investing-basics/investment-products/bonds-or-fixed-income-products/bonds

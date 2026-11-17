@@ -6,6 +6,14 @@ makes that assertion one line:  assert retriever.calls == [] and llm.calls == []
 
 Reused by every later stage (glossary, no_source, citations): extend the fakes, don't replace them.
 """
+import os
+
+# Tests never touch the network. The developer's .env switches LangSmith tracing on, which would send every graph run to
+# api.smith.langchain.com (and fail noisily when the monthly quota is used up). load_dotenv() does not override variables
+# that are already set, so setting them here, before anything imports the app, is enough.
+for _name in ("LANGCHAIN_TRACING_V2", "LANGCHAIN_TRACING", "LANGSMITH_TRACING", "LANGSMITH_TRACING_V2"):
+    os.environ[_name] = "false"
+
 import pytest
 from langchain_core.messages import AIMessage
 

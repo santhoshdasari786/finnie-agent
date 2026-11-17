@@ -1,8 +1,8 @@
 ---
 article_id: sips-and-periodic-investing
-title: SIPs and Periodic Investing
+title: "SIPs and Periodic Investing"
 topic: products
-summary: How systematic investment plans work mechanically, what rupee-cost averaging does and doesn't do, and common misconceptions about SIPs.
+summary: "How systematic investment plans work mechanically, what rupee-cost averaging does and doesn't do, and common misconceptions about SIPs."
 source_urls:
   - https://www.amfiindia.com/uploads/AMFI_Understanding_Mutual_Funds_IAP_Booklet_Final_Website_version_860a5b77aa.pdf
 claim_sources: {}

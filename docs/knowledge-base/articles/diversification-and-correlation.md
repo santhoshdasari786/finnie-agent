@@ -1,8 +1,8 @@
 ---
 article_id: diversification-and-correlation
-title: Diversification and Correlation
+title: "Diversification and Correlation"
 topic: growth-portfolio
-summary: Why spreading investments across assets that don't move in lockstep can reduce overall portfolio risk, and the limits of that effect.
+summary: "Why spreading investments across assets that don't move in lockstep can reduce overall portfolio risk, and the limits of that effect."
 source_urls:
   - https://www.investor.gov/introduction-investing/getting-started/asset-allocation
   - https://www.sec.gov/files/investor/pubs/assetallocation.htm

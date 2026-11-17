@@ -101,6 +101,6 @@ Each agent has its own dedicated design doc — purpose/scope, a detailed archit
 
 ## 6. Testing Strategy
 
-- **Today:** 1,812 automated Python tests (86% line coverage) and 477 web-app tests. No test needs the network or a login: LLMs, providers and the Kite client are replaced by recording fakes. Live checks are separate scripts in `scripts/`. Every change was also mutation-checked (the code deliberately broken to confirm a test notices).
+- **Today:** 2,952 automated Python tests (98% line coverage) and 477 web-app tests. No test needs the network or a login: LLMs, providers and the Kite client are replaced by recording fakes. Live checks are separate scripts in `scripts/`. Every change was also mutation-checked (the code deliberately broken to confirm a test notices).
 - **Original plan (now done):** an automated suite that mocks `fastmcp.Client` / `MCPAdapter` / `create_agent` so agent logic (tool filtering, response normalization, error handling) is tested without any real network call or login, using `pytest-asyncio` with `asyncio_mode = "auto"` (see `pyproject.toml`). Target: 80%+ coverage per the grading rubric, including edge cases like malformed queries and tool/timeout failures.
 - Pure-calculation agents (Goal Planning) are the easiest to hit high coverage on — no mocking required, just assert on the math.

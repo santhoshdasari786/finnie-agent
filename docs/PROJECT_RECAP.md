@@ -1,6 +1,6 @@
 # Finnie: project recap (end to end, as of 2026-11-16)
 
-Finnie is a multi-agent personal-finance **education** assistant. All six agents in the spec are working. State of the tests: **1812 passed, 15 xfailed, 86% line coverage** (plus 477 in the web app). An HTTP API (`POST /chat` and friends, see `docs/API.md`) sits in front of the graph, an MCP server (`src/mcp_server/`, see `docs/agents/mcp_server.md`) exposes six read-only tools to Claude Desktop, and a React front end (`src/web_app/`, see `docs/WEB_APP.md`, 477 tests; four tabs: Chat, Portfolio, Market, Goals, with SVG charts) talks to it.
+Finnie is a multi-agent personal-finance **education** assistant. All six agents in the spec are working. State of the tests: **2952 passed, 15 xfailed, 98% line coverage** (plus 477 in the web app). An HTTP API (`POST /chat` and friends, see `docs/API.md`) sits in front of the graph, an MCP server (`src/mcp_server/`, see `docs/agents/mcp_server.md`) exposes six read-only tools to Claude Desktop, and a React front end (`src/web_app/`, see `docs/WEB_APP.md`, 477 tests; four tabs: Chat, Portfolio, Market, Goals, with SVG charts) talks to it.
 
 ## 1. The request path
 
@@ -25,7 +25,7 @@ A LangGraph state graph in `src/workflow/` (`graph.py`, `nodes.py`, `state.py`).
 
 | Layer | Where | What it does |
 |---|---|---|
-| Knowledge base | `src/rag/`, `docs/knowledge-base/` | 15 articles plus a glossary, Gemini embeddings, Chroma. Retrieval score below 0.66 means "no source" and the LLM is not called |
+| Knowledge base | `src/rag/`, `docs/knowledge-base/` | 51 articles plus a 93-term glossary, Gemini embeddings, Chroma. Retrieval score below 0.66 means "no source" and the LLM is not called |
 | Contracts | `src/core/contracts.py` | every agent: `run(query, ctx) → AgentResult` with status `ok / no_source / clarify / redirect / needs_login / error`, text, citations, data, meta and a mandatory disclaimer |
 | Guardrails | `src/core/guardrails.py` | deterministic, no LLM. Blocks empty, over-long and self-harm messages; flags distress and advice-seeking, which change how agents answer |
 | Router | `src/workflow/router.py`, `classifier.py` | rules (`goal > portfolio > tax > market > news`), then a gated LLM classifier (strict JSON, confidence floor 0.6, 8 s timeout), then fallback to concept Q&A. `off_topic` and `clarify` are answered by the router |
@@ -64,4 +64,4 @@ A LangGraph state graph in `src/workflow/` (`graph.py`, `nodes.py`, `state.py`).
 
 ## 7. Not done yet
 
-`csv` and `manual` portfolio sources · price cache · risk questionnaire · inflation and step-up SIPs · a phrasing eval for the goal agent · Q&A latency measurement (backlog C15).
+`csv` and `manual` portfolio sources · price cache · risk questionnaire · inflation and step-up SIPs · a phrasing eval for the goal agent · Q&A latency measurement (done: `docs/BENCHMARKS.md`).

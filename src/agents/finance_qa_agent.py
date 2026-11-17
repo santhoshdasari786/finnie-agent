@@ -11,6 +11,7 @@ from src.core.llm import LLMFactory
 from src.rag.common.models import ContextSource, RetrievalQuery
 from src.rag.retrieval.citations import cite_chunk, cite_glossary, merge_by_source, renumber_markers, used_markers
 from src.core.guardrails import GuardVerdict, Guardrails
+from src.rag.ingestion.embedders.gemini import EmbeddingUnavailable
 
 log = logging.getLogger(__name__)
 
@@ -110,6 +111,9 @@ class FinanceQAAgent:
             result.answer = self._guards.finalize(result.answer, verdict) # distress suffix, appended once
             result.answer = self._check_answer(result.answer)
             return result
+        except EmbeddingUnavailable:
+            log.warning("finance_qa: the embedding service is unavailable (quota or rate limit)")
+            return self._result(self._s.busy_message, "error")      # calm and specific; no quota details for the user
         except Exception:
             log.exception("finance_qa failed") # the cause is logged, never shown to the user
             return self._result(self._s.error_message, "error")

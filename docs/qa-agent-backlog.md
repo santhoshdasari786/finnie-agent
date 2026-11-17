@@ -194,13 +194,13 @@ New implementation items from these docs:
 | C12 | Shared agent contract test over every agent | P2 | open |
 | C13 | `src/config/app.yaml` and `src/core/config.py` (typed, `extra="forbid"`) | Created 2026-11-02. **Missing:** `tests/core/config_test.py` (real file loads; misspelled key, unknown provider and out-of-range threshold are rejected) | P2 | **done 2026-11-03**: `tests/core/config_test.py` (8 cases); mutation-checked by removing `extra="forbid"` |
 | C14 | Tests for `citations.py` | `used_markers`, `renumber_markers`, `merge_by_source`, `make_excerpt`, `primary_url` have no unit tests of their own (only exercised through the agent). Write them together with the A22 and A23 fixes | P2 | **done 2026-11-03**: `tests/rag/citations_test.py` (14 cases) |
-| C15 | Rung 11 first-call latency | The first graded question took 20.8 s in one run and about 2 s in another; probably a cold connection. Warm the agent at startup in the app, and see whether it repeats | P3 | verify Update 2026-11-03: the whole Rung 11 batch took 18–42 s per LLM answer, so this is not only a cold start; measure LLM time vs retrieval time separately. **Next actions:** (1) time `retrieve` and `ainvoke` separately for one question; (2) check the model and any thinking/reasoning setting in `config.yaml`; (3) cap output length and prompt size; (4) record the before/after numbers here. |
+| C15 | Rung 11 first-call latency (MEASURED 2026-11-18, see `docs/BENCHMARKS.md`: it did not reproduce; latency is the number of model calls times 1 to 2 s) | The first graded question took 20.8 s in one run and about 2 s in another; probably a cold connection. Warm the agent at startup in the app, and see whether it repeats | P3 | verify Update 2026-11-03: the whole Rung 11 batch took 18–42 s per LLM answer, so this is not only a cold start; measure LLM time vs retrieval time separately. **Next actions:** (1) time `retrieve` and `ainvoke` separately for one question; (2) check the model and any thinking/reasoning setting in `config.yaml`; (3) cap output length and prompt size; (4) record the before/after numbers here. |
 
 ## 8. Market, Portfolio and Kite (added 2026-11-12)
 
 | # | Item | Why | Pri | Status |
 |---|---|---|---|---|
-| K1 | Delete the old Kite code | `src/agents/portfolio_agent.py` (LangChain `MCPAdapter`, connects without a token) and the scripts `tests/kite/kite_tools_test.py`, `tests/kite/scratch_kite_test.py`, `tests/agents/portifolioagents/portfolio_agent_test.py` all fail now that the server requires OAuth. Nothing in `src/` imports them except the old file itself. Folds into X7 | P2 | open |
+| K1 | Delete the old Kite code | `src/agents/portfolio_agent.py` (LangChain `MCPAdapter`, connects without a token) and the scripts `tests/kite/kite_tools_test.py`, `tests/kite/scratch_kite_test.py`, `tests/agents/portifolioagents/portfolio_agent_test.py` all fail now that the server requires OAuth. Nothing in `src/` imports them except the old file itself. Folds into X7 | P2 | done |
 | K2 | Verify the mutual-fund row keys | The test account holds no funds (`data: []`), so `tradingsymbol`, `fund`, `quantity`, `average_price`, `last_price` in `KiteSource._fund` are assumed from Kite Connect. Check `scripts/kite_shape.py` output once an account has funds | P2 | verify |
 | K3 | Persist Kite tokens between runs? | Tokens live in memory, so every run needs a login (Kite sessions expire daily anyway). Storing brokerage credentials on disk needs a deliberate decision | P3 | decision |
 | K4 | Login link only works on the app's machine | OAuth approval returns to a `localhost` callback. Fine for the CLI and a local demo; a deployed server needs a different arrangement | P3 | decision |
@@ -263,6 +263,53 @@ New implementation items from these docs:
 | M6 | HTTP transport for MCP | needs a per-client conversation id (the stdio default of one conversation per process would mix clients) | P3 | open |
 | M8 | Negative cache for unknown tickers | a mistyped ticker asks Yahoo every time (0.6 to 1.2 s); remember "not found" for about a minute. Persisting the cache across restarts is a separate, optional step | P3 | open |
 | M7 | Try it in Claude Desktop | manual: a concept question, a quote, a goal, the portfolio; screenshot for the demo | P2 | open |
+
+## 14. Knowledge base expansion (added 2026-11-17)
+
+| ID | Item | Notes | Priority | Status |
+|---|---|---|---|---|
+| KB1 | Embedding quota handling (DONE 2026-11-18: retry with backoff, an immediate clear error for the daily quota, a bounded query cache, and a "knowledge base is busy" reply; `tests/rag/embedder_test.py`) | the free tier allows 100 requests a minute and 1,000 a day. Re-indexing the 51 articles plus a retrieval eval used the whole daily quota, and until it reset every non-glossary question failed with the generic error. Add retry with backoff in `GeminiEmbedder`, a small cache of query embeddings, and a clear user message ("my knowledge base is busy, try again later") | P2 | done |
+| KB2 | Glossary answers can add unsourced detail | live check: "What is a margin call?" answered correctly from the glossary but the model added a bullet defining "leveraged position" that is not in the entry. Tighten the glossary answer prompt to restate the definition only | P3 | open |
+| KB3 | Human review of the 36 new articles | every article is AI-written and source-checked by AI; the tax, pension, DICGC and regulator articles matter most | P1 | open |
+| KB4 | Read the sources that blocked automated access | Income Tax Department, RBI, NSI, EPFO, IRDAI pages were only seen as search summaries; open them in a browser and confirm the claims each article flags | P2 | open |
+| KB5 | The remaining 29 of the 80 planned topics | the content plan in `docs/knowledge-base/content-backlog.md` lists them | P3 | open |
+| KB6 | Retrieval gap is narrowing | in-KB lowest 0.718 vs off-topic highest 0.652 (was 0.739 vs 0.620). Consider a reranker or a per-topic threshold before adding many more articles | P3 | open |
+
+| KB7 | Re-indexing ignores metadata changes | the markdown loader hashes only the article BODY, so editing `topic`, `title` or `last_verified_at` is never re-indexed (the category filter used by the Tax agent depends on `topic`). Hash the metadata too, or update metadata without re-embedding; note that changing the hash makes the next ingestion re-embed every article (about 500 embedding calls, half a day's free quota) | P2 | open |
+| KB8 | Dead code in the RAG package | `chunkers/semantic.py` is a registered stub with no `chunk` method, and `factory.build` has an unreachable duplicate `except KeyError`. Remove or implement | P3 | open |
+| KB9 | Embedding rate limit in `rag.yaml` | the commented `rate_limit` and `retry` keys are not read by anything; the embedder now has its own retry, so delete the comments or wire them | P3 | open |
+| KB10 | Tracing in tests | the developer's `.env` turns LangSmith tracing on, so tests used to send traces to the network. `tests/conftest.py` now switches it off for the whole session | P3 | done |
+
+## 15. Unverified work to finish (added 2026-11-18)
+
+Everything below was **built and tested offline, but not confirmed against the real service or a person**. The Gemini free tier's daily embedding quota (1,000 requests) was used up on 2026-11-18, so nothing that needs an embedding call could be run. It resets about 13 hours after the quota error, so plan these for the next day. Tick each box only after seeing the result.
+
+### A. Needs the embedding quota (run in this order; about 150 requests in total)
+
+- [ ] **A1. Live retrieval eval.** `.venv/bin/python -m pytest tests/eval -v`. Expect 111 passed (102 in-KB questions found in the top 3, 13 off-topic refused). It passed 102/102 on 2026-11-17 *before* two later changes (the glossary alias removal and the embedder rewrite), so it must be re-run. Record the lowest in-KB and highest off-topic scores; if the gap is under 0.03, see KB6.
+- [ ] **A2. Fill the PENDING rows of `docs/BENCHMARKS.md`.** `.venv/bin/python -m scripts.bench_latency --runs 10`, then paste the query-embedding rows, the whole-retrieval row and the knowledge-base question row.
+- [ ] **A3. Read real answers for the 36 new articles.** `.venv/bin/python -m scripts.kb_live_check`. This is a reading check; the file lists what to look for. Never done: only the glossary path was seen live (8 of 8 correct). In particular check that PPF/NPS and dividend-tax answers quote no rate, that the evasion question gets no tricks, and that "P/E ratio" (not in the KB) is handled cautiously.
+- [ ] **A4. The new embedder against the real API.** Confirm one real query works, the second identical query is a cache hit (`embedder.stats()`), and no new error appears. Its retry and quota logic has only been tested against fakes.
+- [ ] **A5. (Do last, only with spare quota.) KB7 re-index.** Fixing the loader to hash metadata makes the next ingestion re-embed all 51 articles (about 500 requests). Do it on a day when nothing else needs the quota, then re-run A1.
+
+### B. Needs a person, a browser or another tool
+
+- [ ] **B1. Docker never built.** `.dockerignore` excludes `docs/`, so the image would not contain the glossary or articles, and the vector index is git-ignored, so a clean build has no index. The Q&A would fail to start. Decide: build the index inside the image (needs embedding quota at build time) or mount `.vectorstore/` and `docs/knowledge-base/glossary.yaml` as a volume; then `docker build` and `docker run` and call `/chat`. Also decide whether the React app belongs in a second image.
+- [ ] **B2. Claude Desktop** (M7). The MCP server was verified over stdio only; open Claude Desktop with the config in `docs/agents/mcp_server.md` and try the five prompts there.
+- [ ] **B3. Human review of the 36 new articles** (KB3), starting with the tax, pension, DICGC, regulator and credit-rating articles.
+- [ ] **B4. Open, in a browser, the sources that blocked automated reading** (KB4): Income Tax Department (dividend TDS, penalties, anti-avoidance), RBI Retail Direct, NSI (PPF), EPFO FAQ, the newer PFRDA exit rule, SEBI gold-exchange FAQ, SMART ODR, IRDAI Bima Bharosa. Each article marks which of its claims rest on these.
+- [ ] **B5. Firefox and Safari.** The React app was driven in Chromium only.
+- [ ] **B6. The stale-prices banner on the Market tab** was tested in jsdom but never seen against a real outage. Simulate one (point the provider at a failing fake or block the network after one good load) and look at it.
+- [ ] **B7. A fresh-machine install.** `requirements.txt` was only dry-run against the existing venv. In a new folder: `python -m venv .venv && .venv/bin/pip install -r requirements.txt`, then run the tests.
+- [ ] **B8. Kite mutual-fund field names** are still assumed (the test account holds no funds); check with an account that does.
+- [ ] **B9. Record the demo** (Step 6): the script is not written yet.
+
+### C. Known weak spots seen but not fixed
+
+- Glossary answers go through the LLM and can add unsourced detail (KB2).
+- "Which stock will double in the next month?" scores 0.652 against a 0.66 threshold, a margin of 0.008. It passes today; a small change to the knowledge base could flip it (KB6).
+- The embedding-quota message tells the user to try again in a few minutes even when the daily quota is gone (it will not recover for hours). Distinguish the two in the message.
+- Scratch files `notes.txt` and `Readme.chroma.md` are tracked in git; decide whether to keep them.
 
 ## Suggested order
 

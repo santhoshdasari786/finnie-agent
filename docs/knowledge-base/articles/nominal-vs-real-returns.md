@@ -1,8 +1,8 @@
 ---
 article_id: nominal-vs-real-returns
-title: Nominal Returns vs. Real Returns
+title: "Nominal Returns vs. Real Returns"
 topic: foundations
-summary: Why the return rate quoted on a product isn't the same as the wealth you actually gain, once inflation is accounted for.
+summary: "Why the return rate quoted on a product isn't the same as the wealth you actually gain, once inflation is accounted for."
 source_urls:
   - https://www.investor.gov/introduction-investing/investing-basics/what-risk
   - https://www.investor.gov/introduction-investing/investing-basics/glossary/purchasing-power

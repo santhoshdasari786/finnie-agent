@@ -1,8 +1,8 @@
 ---
 article_id: inflation-and-purchasing-power
-title: Inflation and Purchasing Power
+title: "Inflation and Purchasing Power"
 topic: foundations
-summary: Why a growing bank balance doesn't always mean growing wealth, and how to reason about what money will actually be worth later.
+summary: "Why a growing bank balance doesn't always mean growing wealth, and how to reason about what money will actually be worth later."
 source_urls:
   - https://www.investor.gov/introduction-investing/investing-basics/glossary/purchasing-power
   - https://www.investor.gov/introduction-investing/investing-basics/what-risk

@@ -1,8 +1,8 @@
 ---
 article_id: investor-scams-and-unrealistic-returns
-title: Common Investment Scams and Unrealistic Return Promises
+title: "Common Investment Scams and Unrealistic Return Promises"
 topic: behaviour-risk
-summary: Warning signs that distinguish legitimate investment opportunities from scams, and why "guaranteed high returns" is itself a red flag.
+summary: "Warning signs that distinguish legitimate investment opportunities from scams, and why \"guaranteed high returns\" is itself a red flag."
 source_urls:
   - https://investor.sebi.gov.in/cautiontoinvestor.html
   - https://www.investor.gov/introduction-investing/general-resources/news-alerts/alerts-bulletins/investor-alerts/investor-18

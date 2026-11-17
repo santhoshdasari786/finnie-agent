@@ -1,24 +1,947 @@
+# Glossary: a single-term question is answered straight from here (no retrieval, no LLM), so every definition must stand on its own.
+# Reviewed 2026-11-17 against the SEBI, AMFI, DICGC and SEC pages named in each entry's source_urls (AI-assisted, no qualified human review).
 - term: Exchange-traded fund
-  aliases: [ETF, ETFs, exchange traded fund]
-  definition: >
-    A fund that holds a basket of securities and trades on a stock exchange
-    throughout the day, like a share.
+  aliases:
+  - ETF
+  - ETFs
+  - exchange traded fund
+  definition: 'A fund that holds a basket of securities and trades on a stock exchange throughout the day, like
+    a share.
+
+    '
   topic: products
-  source_urls: ["https://www.investor.gov/..."]
-  related_articles: [mutual-funds-and-etfs]
-  last_verified_at: "2026-10-23"
-
+  source_urls:
+  - https://www.amfiindia.com/uploads/AMFI_Understanding_Mutual_Funds_IAP_Booklet_Final_Website_version_860a5b77aa.pdf
+  related_articles:
+  - mutual-funds-and-etfs
+  last_verified_at: '2026-10-23'
 - term: Expense ratio
-  aliases: [TER, total expense ratio]
-  definition: >
-    The annual fee a fund charges, as a percentage of the money invested.
-  topic: costs-taxes
-  related_articles: [expense-ratios-and-fees]
+  aliases:
+  - TER
+  - total expense ratio
+  definition: 'The annual fee a fund charges, as a percentage of the money invested.
 
-- term: Bond                       # same term, two senses → ambiguity handling
+    '
+  topic: costs-taxes
+  related_articles:
+  - expense-ratios-and-fees
+  source_urls:
+  - https://www.amfiindia.com/uploads/AMFI_Understanding_Mutual_Funds_IAP_Booklet_Final_Website_version_860a5b77aa.pdf
+  last_verified_at: '2026-11-17'
+- term: Bond
   sense: fixed income
   definition: A loan to a government or company that pays interest and returns the principal at maturity.
-  related_articles: [bonds-and-interest-rate-risk]
+  related_articles:
+  - bonds-and-interest-rate-risk
+  topic: products
+  source_urls:
+  - https://investor.sebi.gov.in/pdf/reference-material/beginners.pdf
 - term: Bond
   sense: surety / legal
   definition: A written promise or guarantee to perform an obligation or pay a penalty.
+- term: Asset class
+  definition: A group of investments that behave in a similar way, such as equity (shares), debt (bonds and deposits),
+    gold and cash.
+  topic: foundations
+  source_urls:
+  - https://investor.sebi.gov.in/pdf/reference-material/beginners.pdf
+  related_articles:
+  - asset-classes-overview
+  last_verified_at: '2026-11-17'
+- term: Asset allocation
+  aliases:
+  - allocation
+  definition: How an investor divides money among asset classes such as equity, debt and gold. It is chosen to suit
+    the investor's goals, time horizon and comfort with risk.
+  topic: growth-portfolio
+  source_urls:
+  - https://www.investor.gov/introduction-investing/getting-started/asset-allocation
+  related_articles:
+  - asset-allocation
+  last_verified_at: '2026-11-17'
+- term: Diversification
+  definition: Spreading money across different investments, sectors and asset classes so that the poor result of
+    any one has less effect on the whole.
+  topic: growth-portfolio
+  source_urls:
+  - https://investor.sebi.gov.in/pdf/downloadable-documents/Financial%20Education%20Booklet%20-%20English.pdf
+  related_articles:
+  - diversification-and-correlation
+  last_verified_at: '2026-11-17'
+- term: Rebalancing
+  aliases:
+  - portfolio rebalancing
+  definition: Bringing a portfolio's mix of assets back toward its target weights after price changes have moved
+    it away. It controls risk; it does not promise higher returns.
+  topic: growth-portfolio
+  source_urls:
+  - https://www.investor.gov/introduction-investing/getting-started/asset-allocation
+  related_articles:
+  - portfolio-rebalancing
+  last_verified_at: '2026-11-17'
+- term: Risk tolerance
+  definition: How comfortable a person is with the possibility of losses and price swings in exchange for potentially
+    higher returns.
+  topic: growth-portfolio
+  source_urls:
+  - https://www.investor.gov/introduction-investing/getting-started/asset-allocation
+  related_articles:
+  - risk-tolerance-vs-risk-capacity
+  last_verified_at: '2026-11-17'
+- term: Risk capacity
+  definition: How much loss a person's finances can absorb without harming essential goals, based on things like
+    income stability, savings, debts and how soon the money is needed.
+  topic: growth-portfolio
+  source_urls:
+  - https://investor.gov/introduction-investing/basics/save-invest/gauge-your-risk-tolerance
+  related_articles:
+  - risk-tolerance-vs-risk-capacity
+  last_verified_at: '2026-11-17'
+- term: Time horizon
+  aliases:
+  - investing horizon
+  definition: The number of months, years or decades an investor plans to invest to reach a goal. Longer horizons
+    can tolerate more price fluctuation.
+  topic: growth-portfolio
+  source_urls:
+  - https://www.investor.gov/introduction-investing/getting-started/asset-allocation
+  related_articles:
+  - risk-tolerance-vs-risk-capacity
+  last_verified_at: '2026-11-17'
+- term: Volatility
+  definition: How much and how quickly an investment's price moves up and down. A volatile price can fall even when
+    the company is not in danger of failing.
+  topic: growth-portfolio
+  source_urls:
+  - https://investor.sebi.gov.in/pdf/downloadable-documents/Financial%20Education%20Booklet%20-%20English.pdf
+  related_articles:
+  - volatility-vs-permanent-loss
+  last_verified_at: '2026-11-17'
+- term: Liquidity
+  definition: How quickly and easily an investment can be turned into cash without a big loss in value. Savings
+    accounts are highly liquid; many investments are less so.
+  topic: foundations
+  source_urls:
+  - https://investor.sebi.gov.in/pdf/downloadable-documents/Financial%20Education%20Booklet%20-%20English.pdf
+  related_articles:
+  - asset-classes-overview
+  last_verified_at: '2026-11-17'
+- term: Inflation
+  definition: A general rise in the prices of goods and services over time, which reduces what a rupee can buy.
+  topic: foundations
+  source_urls:
+  - https://investor.sebi.gov.in/pdf/downloadable-documents/Financial%20Education%20Booklet%20-%20English.pdf
+  related_articles:
+  - inflation-and-purchasing-power
+  last_verified_at: '2026-11-17'
+- term: Purchasing power
+  definition: The quantity of goods and services a given amount of money can buy. Inflation reduces it over time.
+  topic: foundations
+  source_urls:
+  - https://investor.sebi.gov.in/pdf/downloadable-documents/Financial%20Education%20Booklet%20-%20English.pdf
+  related_articles:
+  - inflation-and-purchasing-power
+  last_verified_at: '2026-11-17'
+- term: Compounding
+  aliases:
+  - compound interest
+  - power of compounding
+  definition: Earning returns on both the original amount and the returns already earned, so growth builds on itself
+    over time.
+  topic: growth-portfolio
+  source_urls:
+  - https://investor.sebi.gov.in/pdf/downloadable-documents/Financial%20Education%20Booklet%20-%20English.pdf
+  related_articles:
+  - compound-interest
+  last_verified_at: '2026-11-17'
+- term: Time value of money
+  definition: The idea that money available now is worth more than the same amount later, because it can be invested
+    to earn a return and because prices rise.
+  topic: foundations
+  source_urls:
+  - https://investor.sebi.gov.in/pdf/downloadable-documents/Financial%20Education%20Booklet%20-%20English.pdf
+  related_articles:
+  - compound-interest
+  last_verified_at: '2026-11-17'
+- term: Rule of 72
+  definition: 'A quick estimate of how long money takes to double: divide 72 by the annual rate of return. At 6%
+    a year, about 12 years.'
+  topic: growth-portfolio
+  source_urls:
+  - https://investor.sebi.gov.in/pdf/downloadable-documents/Financial%20Education%20Booklet%20-%20English.pdf
+  related_articles:
+  - compound-interest
+  last_verified_at: '2026-11-17'
+- term: Nominal return
+  definition: The return on an investment before adjusting for inflation.
+  topic: growth-portfolio
+  source_urls:
+  - https://investor.sebi.gov.in/pdf/downloadable-documents/Financial%20Education%20Booklet%20-%20English.pdf
+  related_articles:
+  - nominal-vs-real-returns
+  last_verified_at: '2026-11-17'
+- term: Real return
+  aliases:
+  - real rate of return
+  definition: The return on an investment after adjusting for inflation, showing the change in purchasing power.
+  topic: growth-portfolio
+  source_urls:
+  - https://investor.sebi.gov.in/pdf/downloadable-documents/Financial%20Education%20Booklet%20-%20English.pdf
+  related_articles:
+  - nominal-vs-real-returns
+  last_verified_at: '2026-11-17'
+- term: CAGR
+  aliases:
+  - compound annual growth rate
+  definition: 'Compound annual growth rate: the steady yearly rate that would take an investment from its starting
+    value to its ending value over a period. It suits a single lump sum.'
+  topic: growth-portfolio
+  source_urls:
+  - https://zerodha.com/varsity/chapter/measuring-mutual-fund-returns/
+  related_articles:
+  - cagr-vs-xirr
+  last_verified_at: '2026-11-17'
+- term: XIRR
+  definition: A return measure for investments with several cash flows on different dates, such as SIP instalments,
+    that accounts for when each amount went in or out.
+  topic: growth-portfolio
+  source_urls:
+  - https://zerodha.com/varsity/chapter/measuring-mutual-fund-returns/
+  related_articles:
+  - cagr-vs-xirr
+  last_verified_at: '2026-11-17'
+- term: Mutual fund
+  definition: A fund that pools money from many investors and invests it in shares, bonds or other assets, managed
+    by professionals. Investors hold units and each scheme must be registered with SEBI.
+  topic: products
+  source_urls:
+  - https://www.amfiindia.com/uploads/AMFI_Understanding_Mutual_Funds_IAP_Booklet_Final_Website_version_860a5b77aa.pdf
+  related_articles:
+  - mutual-funds-and-etfs
+  last_verified_at: '2026-11-17'
+- term: NAV
+  aliases:
+  - net asset value
+  definition: 'Net asset value: the value of one unit of a mutual fund scheme, found from the scheme''s assets less
+    liabilities divided by the number of units. Units are bought and redeemed at the applicable NAV.'
+  topic: products
+  source_urls:
+  - https://www.amfiindia.com/uploads/AMFI_Understanding_Mutual_Funds_IAP_Booklet_Final_Website_version_860a5b77aa.pdf
+  related_articles:
+  - mutual-funds-and-etfs
+  last_verified_at: '2026-11-17'
+- term: Index fund
+  definition: A mutual fund that holds the securities of a market index in the same weights as the index, with passive
+    management, aiming to match the index's performance.
+  topic: products
+  source_urls:
+  - https://www.amfiindia.com/uploads/AMFI_Understanding_Mutual_Funds_IAP_Booklet_Final_Website_version_860a5b77aa.pdf
+  related_articles:
+  - index-vs-active-funds
+  last_verified_at: '2026-11-17'
+- term: Actively managed fund
+  aliases:
+  - active fund
+  definition: A fund whose manager selects securities using research and market views, aiming to beat a benchmark
+    index. Results can be better or worse than the benchmark.
+  topic: products
+  source_urls:
+  - https://www.amfiindia.com/uploads/AMFI_Understanding_Mutual_Funds_IAP_Booklet_Final_Website_version_860a5b77aa.pdf
+  related_articles:
+  - index-vs-active-funds
+  last_verified_at: '2026-11-17'
+- term: Equity fund
+  aliases:
+  - equity mutual fund
+  definition: A mutual fund scheme that invests mainly in shares and equity-related instruments, aimed at long-term
+    growth but subject to price swings.
+  topic: products
+  source_urls:
+  - https://www.amfiindia.com/uploads/AMFI_Understanding_Mutual_Funds_IAP_Booklet_Final_Website_version_860a5b77aa.pdf
+  related_articles:
+  - equity-debt-hybrid-funds
+  last_verified_at: '2026-11-17'
+- term: Debt fund
+  aliases:
+  - debt mutual fund
+  definition: A mutual fund scheme that invests mainly in bonds and other fixed-income securities, aiming for income
+    and capital preservation. Its value can still fall, for example when interest rates rise.
+  topic: products
+  source_urls:
+  - https://www.amfiindia.com/uploads/AMFI_Understanding_Mutual_Funds_IAP_Booklet_Final_Website_version_860a5b77aa.pdf
+  related_articles:
+  - equity-debt-hybrid-funds
+  last_verified_at: '2026-11-17'
+- term: Hybrid fund
+  aliases:
+  - balanced fund
+  definition: A mutual fund scheme that invests in a mix of equity and debt, with the share of each depending on
+    the scheme's category.
+  topic: products
+  source_urls:
+  - https://www.amfiindia.com/uploads/AMFI_Understanding_Mutual_Funds_IAP_Booklet_Final_Website_version_860a5b77aa.pdf
+  related_articles:
+  - equity-debt-hybrid-funds
+  last_verified_at: '2026-11-17'
+- term: Liquid fund
+  definition: A debt mutual fund category that invests in debt and money market securities with a maturity of up
+    to 91 days, meant for parking short-term money.
+  topic: products
+  source_urls:
+  - https://www.amfiindia.com/uploads/AMFI_Understanding_Mutual_Funds_IAP_Booklet_Final_Website_version_860a5b77aa.pdf
+  related_articles:
+  - equity-debt-hybrid-funds
+  last_verified_at: '2026-11-17'
+- term: ELSS
+  aliases:
+  - equity linked savings scheme
+  - equity linked saving scheme
+  definition: 'Equity Linked Savings Scheme: an equity mutual fund with a 3-year lock-in that has been eligible
+    for a tax deduction under the old tax regime.'
+  topic: products
+  source_urls:
+  - https://www.amfiindia.com/uploads/AMFI_Understanding_Mutual_Funds_IAP_Booklet_Final_Website_version_860a5b77aa.pdf
+  related_articles:
+  - exit-loads-and-lock-ins
+  - equity-debt-hybrid-funds
+  last_verified_at: '2026-11-17'
+- term: Direct plan
+  definition: A version of a mutual fund scheme bought without a distributor. It has the same portfolio as the regular
+    plan but generally a lower expense ratio.
+  topic: costs-taxes
+  source_urls:
+  - https://www.amfiindia.com/uploads/AMFI_Understanding_Mutual_Funds_IAP_Booklet_Final_Website_version_860a5b77aa.pdf
+  related_articles:
+  - direct-vs-regular-plans
+  last_verified_at: '2026-11-17'
+- term: Regular plan
+  definition: A version of a mutual fund scheme bought through an intermediary. It has the same portfolio as the
+    direct plan, with distribution costs built into its expense ratio.
+  topic: costs-taxes
+  source_urls:
+  - https://www.amfiindia.com/uploads/AMFI_Understanding_Mutual_Funds_IAP_Booklet_Final_Website_version_860a5b77aa.pdf
+  related_articles:
+  - direct-vs-regular-plans
+  last_verified_at: '2026-11-17'
+- term: Exit load
+  definition: A fee charged when mutual fund units are redeemed, deducted from the NAV. For example, with a NAV
+    of ₹100 and a 1% exit load, the redemption price is ₹99.
+  topic: costs-taxes
+  source_urls:
+  - https://www.amfiindia.com/uploads/AMFI_Understanding_Mutual_Funds_IAP_Booklet_Final_Website_version_860a5b77aa.pdf
+  related_articles:
+  - exit-loads-and-lock-ins
+  last_verified_at: '2026-11-17'
+- term: Lock-in period
+  aliases:
+  - lock in
+  - lock-in
+  definition: A period during which an investment cannot be withdrawn or redeemed, such as the 3-year lock-in of
+    an ELSS. It differs from an exit load, which lets you sell but charges a fee.
+  topic: costs-taxes
+  source_urls:
+  - https://www.amfiindia.com/uploads/AMFI_Understanding_Mutual_Funds_IAP_Booklet_Final_Website_version_860a5b77aa.pdf
+  related_articles:
+  - exit-loads-and-lock-ins
+  last_verified_at: '2026-11-17'
+- term: Risk-o-meter
+  aliases:
+  - riskometer
+  definition: A label required by SEBI for each mutual fund scheme showing its level of risk, from Low to Very High.
+  topic: safety-regulation
+  source_urls:
+  - https://investor.sebi.gov.in/pdf/downloadable-documents/Financial%20Education%20Booklet%20-%20English.pdf
+  related_articles:
+  - reading-a-mutual-fund-factsheet
+  last_verified_at: '2026-11-17'
+- term: Factsheet
+  aliases:
+  - fund factsheet
+  definition: 'A short periodic document summarising a mutual fund scheme: its objective, benchmark, holdings, expenses,
+    risk label and past performance.'
+  topic: safety-regulation
+  source_urls:
+  - https://www.amfiindia.com/uploads/AMFI_Understanding_Mutual_Funds_IAP_Booklet_Final_Website_version_860a5b77aa.pdf
+  related_articles:
+  - reading-a-mutual-fund-factsheet
+  last_verified_at: '2026-11-17'
+- term: Benchmark
+  aliases:
+  - benchmark index
+  definition: The index against which a fund's performance is judged. It should resemble what the fund invests in.
+  topic: growth-portfolio
+  source_urls:
+  - https://www.amfiindia.com/uploads/AMFI_Understanding_Mutual_Funds_IAP_Booklet_Final_Website_version_860a5b77aa.pdf
+  related_articles:
+  - benchmarks-and-market-indices
+  last_verified_at: '2026-11-17'
+- term: Market index
+  aliases:
+  - stock market index
+  - index
+  definition: A number that summarises the price movement of a chosen group of securities, showing how a market
+    or segment is doing as a whole. You cannot buy an index directly; funds can track it.
+  topic: growth-portfolio
+  source_urls:
+  - https://investor.sebi.gov.in/pdf/reference-material/beginners.pdf
+  related_articles:
+  - benchmarks-and-market-indices
+  last_verified_at: '2026-11-17'
+- term: Sensex
+  aliases:
+  - bse sensex
+  definition: The widely quoted benchmark index of the BSE, made up of 30 large and actively traded companies.
+  topic: growth-portfolio
+  source_urls:
+  - https://investor.sebi.gov.in/pdf/reference-material/beginners.pdf
+  related_articles:
+  - benchmarks-and-market-indices
+  last_verified_at: '2026-11-17'
+- term: Nifty 50
+  aliases:
+  - nifty
+  - nifty50
+  definition: The widely quoted benchmark index of the NSE, made up of 50 large companies.
+  topic: growth-portfolio
+  source_urls:
+  - https://investor.sebi.gov.in/pdf/reference-material/beginners.pdf
+  related_articles:
+  - benchmarks-and-market-indices
+  last_verified_at: '2026-11-17'
+- term: Share
+  aliases:
+  - stock
+  - equity share
+  - shares
+  - equity
+  definition: A unit of ownership in a company. A shareholder is a part-owner who may receive dividends and can
+    gain or lose as the share price changes.
+  topic: products
+  source_urls:
+  - https://investor.sebi.gov.in/pdf/reference-material/beginners.pdf
+  related_articles:
+  - stocks-and-shares
+  last_verified_at: '2026-11-17'
+- term: Dividend
+  definition: A portion of a company's profit paid to its shareholders. It is declared by the company and is not
+    guaranteed.
+  topic: products
+  source_urls:
+  - https://www.investor.gov/introduction-investing/investing-basics/glossary/dividend
+  related_articles:
+  - dividends
+  last_verified_at: '2026-11-17'
+- term: Dividend yield
+  definition: The annual dividend per share divided by the current share price, shown as a percentage. It describes
+    the cash payout relative to price, not the total return.
+  topic: products
+  source_urls:
+  - https://www.investor.gov/introduction-investing/investing-basics/glossary/dividend
+  related_articles:
+  - dividends
+  last_verified_at: '2026-11-17'
+- term: Market capitalisation
+  aliases:
+  - market cap
+  - market capitalization
+  definition: The value of a company worked out by multiplying the market price of one share by the number of shares
+    outstanding. It shows a company's size, not its share price.
+  topic: products
+  source_urls:
+  - https://www.investor.gov/introduction-investing/investing-basics/glossary/market-capitalization
+  related_articles:
+  - stocks-and-shares
+  last_verified_at: '2026-11-17'
+- term: IPO
+  aliases:
+  - initial public offer
+  - initial public offering
+  definition: 'Initial public offer: a company''s first sale of shares to the public in the primary market, after
+    which the shares are listed on an exchange.'
+  topic: products
+  source_urls:
+  - https://investor.sebi.gov.in/pdf/downloadable-documents/Financial%20Education%20Booklet%20-%20English.pdf
+  related_articles:
+  - how-financial-markets-work
+  - stocks-and-shares
+  last_verified_at: '2026-11-17'
+- term: Primary market
+  definition: The market where a company issues new securities, such as in an IPO, directly to investors.
+  topic: products
+  source_urls:
+  - https://investor.sebi.gov.in/pdf/downloadable-documents/Financial%20Education%20Booklet%20-%20English.pdf
+  related_articles:
+  - how-financial-markets-work
+  last_verified_at: '2026-11-17'
+- term: Secondary market
+  definition: The market, such as a stock exchange, where existing securities are bought and sold between investors
+    after they have been issued.
+  topic: products
+  source_urls:
+  - https://investor.sebi.gov.in/pdf/downloadable-documents/Financial%20Education%20Booklet%20-%20English.pdf
+  related_articles:
+  - how-financial-markets-work
+  last_verified_at: '2026-11-17'
+- term: Demat account
+  aliases:
+  - dematerialised account
+  - demat
+  definition: An account that holds shares and other securities in electronic form, opened with a SEBI-registered
+    depository participant of NSDL or CDSL.
+  topic: products
+  source_urls:
+  - https://investor.sebi.gov.in/pdf/downloadable-documents/Financial%20Education%20Booklet%20-%20English.pdf
+  related_articles:
+  - stocks-and-shares
+  - how-stock-exchanges-work
+  last_verified_at: '2026-11-17'
+- term: Trading account
+  definition: An account with a SEBI-registered stock broker used to place orders to buy and sell securities on
+    an exchange.
+  topic: products
+  source_urls:
+  - https://investor.sebi.gov.in/pdf/downloadable-documents/Financial%20Education%20Booklet%20-%20English.pdf
+  related_articles:
+  - stocks-and-shares
+  - how-stock-exchanges-work
+  last_verified_at: '2026-11-17'
+- term: Depository
+  aliases:
+  - nsdl
+  - cdsl
+  definition: An institution that holds securities in electronic form. India has two SEBI-registered depositories,
+    NSDL and CDSL.
+  topic: products
+  source_urls:
+  - https://investor.sebi.gov.in/pdf/downloadable-documents/Financial%20Education%20Booklet%20-%20English.pdf
+  related_articles:
+  - how-stock-exchanges-work
+  last_verified_at: '2026-11-17'
+- term: Contract note
+  definition: A legal document from a broker as evidence of a trade, showing what was bought or sold, the price,
+    the time and the brokerage and other charges.
+  topic: costs-taxes
+  source_urls:
+  - https://investor.sebi.gov.in/pdf/downloadable-documents/Financial%20Education%20Booklet%20-%20English.pdf
+  related_articles:
+  - how-stock-exchanges-work
+  - brokerage-stt-and-trading-charges
+  last_verified_at: '2026-11-17'
+- term: Brokerage
+  definition: The fee a broker charges for executing a trade. It differs between brokers and is shown on the contract
+    note.
+  topic: costs-taxes
+  source_urls:
+  - https://investor.sebi.gov.in/pdf/downloadable-documents/Financial%20Education%20Booklet%20-%20English.pdf
+  related_articles:
+  - brokerage-stt-and-trading-charges
+  last_verified_at: '2026-11-17'
+- term: STT
+  aliases:
+  - securities transaction tax
+  definition: 'Securities Transaction Tax: a tax charged on certain securities transactions on exchanges. Whether
+    it applies and at what rate depends on the type of trade and current rules.'
+  topic: costs-taxes
+  source_urls:
+  - https://investor.sebi.gov.in/pdf/downloadable-documents/Financial%20Education%20Booklet%20-%20English.pdf
+  related_articles:
+  - brokerage-stt-and-trading-charges
+  last_verified_at: '2026-11-17'
+- term: Settlement cycle
+  aliases:
+  - t+1
+  - t+2
+  - settlement
+  definition: The number of trading days between a trade and the exchange of money and shares, written T+n. Indian
+    exchanges moved equity trades to T+1 in January 2023; confirm the current cycle.
+  topic: products
+  source_urls:
+  - https://investor.sebi.gov.in/pdf/downloadable-documents/Financial%20Education%20Booklet%20-%20English.pdf
+  related_articles:
+  - how-stock-exchanges-work
+  last_verified_at: '2026-11-17'
+- term: Margin
+  definition: The part of a purchase's price that an investor pays up front when the broker finances the rest.
+  topic: products
+  source_urls:
+  - https://investor.sebi.gov.in/pdf/downloadable-documents/Financial%20Education%20Booklet%20-%20English.pdf
+  related_articles:
+  - leverage-and-margin
+  last_verified_at: '2026-11-17'
+- term: Leverage
+  definition: Investing with borrowed money or a product that gives larger exposure than the money put in. It magnifies
+    both gains and losses.
+  topic: behaviour-risk
+  source_urls:
+  - https://www.investor.gov/introduction-investing/general-resources/news-alerts/alerts-bulletins/investor-bulletins-29
+  related_articles:
+  - leverage-and-margin
+  last_verified_at: '2026-11-17'
+- term: Margin call
+  definition: A demand from a broker to add cash or securities when the value of a leveraged position falls. If
+    it is not met, the broker may sell securities without consulting the investor.
+  topic: behaviour-risk
+  source_urls:
+  - https://www.investor.gov/introduction-investing/general-resources/news-alerts/alerts-bulletins/investor-bulletins-29
+  related_articles:
+  - leverage-and-margin
+  last_verified_at: '2026-11-17'
+- term: Debenture
+  definition: A loan instrument issued by a company that pays fixed interest and repays the amount on a set date,
+    often secured against company assets.
+  topic: products
+  source_urls:
+  - https://investor.sebi.gov.in/pdf/reference-material/beginners.pdf
+  related_articles:
+  - bonds-and-interest-rate-risk
+  - asset-classes-overview
+  last_verified_at: '2026-11-17'
+- term: Coupon
+  aliases:
+  - coupon rate
+  definition: The fixed interest a bond pays, stated as a percentage of its face value.
+  topic: products
+  source_urls:
+  - https://investor.sebi.gov.in/pdf/reference-material/beginners.pdf
+  related_articles:
+  - bond-price-change-worked-example
+  - bonds-and-interest-rate-risk
+  last_verified_at: '2026-11-17'
+- term: Face value
+  aliases:
+  - par value
+  definition: The amount a bond repays at maturity, and the base on which its coupon is calculated.
+  topic: products
+  source_urls:
+  - https://investor.sebi.gov.in/pdf/reference-material/beginners.pdf
+  related_articles:
+  - bond-price-change-worked-example
+  last_verified_at: '2026-11-17'
+- term: Yield
+  aliases:
+  - bond yield
+  definition: The return an investor earns on a bond, usually as an annual percentage of its price. Bond prices
+    and yields move in opposite directions.
+  topic: products
+  source_urls:
+  - https://investor.sebi.gov.in/pdf/reference-material/beginners.pdf
+  related_articles:
+  - bond-price-change-worked-example
+  - bonds-and-interest-rate-risk
+  last_verified_at: '2026-11-17'
+- term: Government security
+  aliases:
+  - g-sec
+  - gsec
+  - gilt
+  - g-secs
+  definition: A bond issued by the Government of India to borrow money, paying fixed interest and carrying no default
+    risk, though its price changes with interest rates.
+  topic: products
+  source_urls:
+  - https://investor.sebi.gov.in/pdf/reference-material/beginners.pdf
+  related_articles:
+  - government-securities
+  last_verified_at: '2026-11-17'
+- term: Treasury bill
+  aliases:
+  - t-bill
+  - t bill
+  - tbill
+  definition: A short-term government security, with a maturity of 14 to 365 days, sold at a discount to face value
+    and repaid at face value.
+  topic: products
+  source_urls:
+  - https://investor.sebi.gov.in/pdf/reference-material/beginners.pdf
+  related_articles:
+  - government-securities
+  last_verified_at: '2026-11-17'
+- term: Credit risk
+  aliases:
+  - default risk
+  definition: The risk that a borrower does not pay interest or repay the loan in full and on time.
+  topic: products
+  source_urls:
+  - https://www.sebi.gov.in/sebi_data/faqfiles/mar-2026/1772445490055.pdf
+  related_articles:
+  - credit-risk-and-credit-ratings
+  last_verified_at: '2026-11-17'
+- term: Credit rating
+  definition: A rating agency's opinion on how likely a debt obligation is to be repaid in full and on time. It
+    is not a recommendation to buy, hold or sell.
+  topic: products
+  source_urls:
+  - https://www.sebi.gov.in/sebi_data/faqfiles/mar-2026/1772445490055.pdf
+  related_articles:
+  - credit-risk-and-credit-ratings
+  last_verified_at: '2026-11-17'
+- term: Fixed deposit
+  aliases:
+  - fd
+  - fixed deposits
+  definition: A bank deposit for a fixed term at a stated interest rate. Rates and terms vary by bank, and early
+    withdrawal usually costs interest.
+  topic: products
+  source_urls:
+  - https://investor.sebi.gov.in/pdf/downloadable-documents/Financial%20Education%20Booklet%20-%20English.pdf
+  related_articles:
+  - fixed-and-recurring-deposits
+  last_verified_at: '2026-11-17'
+- term: Recurring deposit
+  aliases:
+  - rd
+  - recurring deposits
+  definition: A bank deposit in which a fixed amount is deposited every month for a set term, earning higher interest
+    than a savings account.
+  topic: products
+  source_urls:
+  - https://investor.sebi.gov.in/pdf/downloadable-documents/Financial%20Education%20Booklet%20-%20English.pdf
+  related_articles:
+  - fixed-and-recurring-deposits
+  last_verified_at: '2026-11-17'
+- term: Deposit insurance
+  aliases:
+  - dicgc
+  definition: Cover from DICGC for bank deposits up to a limit per depositor per bank in the same right and capacity,
+    as published by DICGC. It does not cover mutual funds, shares or company deposits.
+  topic: safety-regulation
+  source_urls:
+  - https://www.dicgc.org.in/FAQs
+  related_articles:
+  - deposit-insurance-dicgc
+  last_verified_at: '2026-11-17'
+- term: PPF
+  aliases:
+  - public provident fund
+  definition: 'Public Provident Fund: a government-backed long-term savings scheme that matures after 15 financial
+    years. Its rate and limits are set by the Government and change.'
+  topic: products
+  source_urls:
+  - https://www.nsiindia.gov.in/InternalPage.aspx?Id_Pk=79
+  related_articles:
+  - ppf-epf-nps
+  last_verified_at: '2026-11-17'
+- term: EPF
+  aliases:
+  - provident fund
+  - employees provident fund
+  - employees' provident fund
+  definition: 'Employees'' Provident Fund: a retirement savings scheme for salaried employees, run by the EPFO,
+    to which the employee and the employer contribute.'
+  topic: products
+  source_urls:
+  - https://www.epfindia.gov.in/
+  related_articles:
+  - ppf-epf-nps
+  last_verified_at: '2026-11-17'
+- term: NPS
+  aliases:
+  - national pension system
+  - national pension scheme
+  definition: 'National Pension System: a market-linked retirement scheme regulated by PFRDA, in which part of the
+    corpus at retirement must buy an annuity.'
+  topic: products
+  source_urls:
+  - https://www.pfrda.org.in/web/pfrda/w/faqs/exits-for-all-citizen-model
+  related_articles:
+  - ppf-epf-nps
+  last_verified_at: '2026-11-17'
+- term: Annuity
+  definition: A regular income, usually bought from an insurance company with a lump sum, often used to turn a pension
+    corpus into monthly income.
+  topic: products
+  source_urls:
+  - https://investor.sebi.gov.in/pdf/reference-material/beginners.pdf
+  related_articles:
+  - ppf-epf-nps
+  last_verified_at: '2026-11-17'
+- term: Gold ETF
+  definition: A mutual fund scheme that invests mainly in gold and trades on a stock exchange, so its price follows
+    the price of gold.
+  topic: products
+  source_urls:
+  - https://www.sebi.gov.in/sebi_data/faqfiles/nov-2022/1667996603757.pdf
+  related_articles:
+  - gold-as-an-investment
+  last_verified_at: '2026-11-17'
+- term: Sovereign Gold Bond
+  aliases:
+  - sgb
+  definition: A government security denominated in grams of gold, issued by the RBI on behalf of the Government
+    of India. Check whether a new series is currently open.
+  topic: products
+  source_urls:
+  - https://www.sebi.gov.in/sebi_data/faqfiles/nov-2022/1667996603757.pdf
+  related_articles:
+  - gold-as-an-investment
+  last_verified_at: '2026-11-17'
+- term: Capital gain
+  aliases:
+  - capital gains
+  definition: The profit from selling an asset for more than it cost. It is classed as short-term or long-term by
+    holding period, and the rules differ by asset and change over time.
+  topic: costs-taxes
+  source_urls:
+  - https://www.incometaxindia.gov.in/w/tax-on-long-term-capital-gains
+  related_articles:
+  - capital-gains-tax-basics-india
+  last_verified_at: '2026-11-17'
+- term: TDS
+  aliases:
+  - tax deducted at source
+  definition: 'Tax deducted at source: tax withheld by the payer, such as a bank or company, before paying interest
+    or dividends, and credited against the receiver''s total tax.'
+  topic: costs-taxes
+  source_urls:
+  - https://www.incometaxindia.gov.in/w/section-194-59
+  related_articles:
+  - dividend-income-and-taxation
+  - fixed-and-recurring-deposits
+  last_verified_at: '2026-11-17'
+- term: Tax evasion
+  definition: Illegally hiding income or misreporting to pay less tax. It is an offence, unlike lawful tax planning.
+  topic: costs-taxes
+  source_urls:
+  - https://wm.incometaxindia.gov.in/w/penalties-and-prosecutions
+  related_articles:
+  - tax-planning-vs-tax-evasion
+  last_verified_at: '2026-11-17'
+- term: KYC
+  aliases:
+  - know your customer
+  - know your client
+  definition: 'Know Your Customer: the identity and address checks required to open a bank, demat or trading account.'
+  topic: safety-regulation
+  source_urls:
+  - https://investor.sebi.gov.in/pdf/downloadable-documents/Financial%20Education%20Booklet%20-%20English.pdf
+  related_articles:
+  - how-stock-exchanges-work
+  last_verified_at: '2026-11-17'
+- term: SEBI
+  definition: 'The Securities and Exchange Board of India: the regulator of India''s securities market, set up by
+    an Act of Parliament in 1992 to protect investors and develop and regulate the market.'
+  topic: safety-regulation
+  source_urls:
+  - https://investor.sebi.gov.in/pdf/reference-material/beginners.pdf
+  related_articles:
+  - indian-financial-regulators
+  last_verified_at: '2026-11-17'
+- term: RBI
+  aliases:
+  - reserve bank of india
+  definition: 'The Reserve Bank of India: the central bank, which runs monetary policy and regulates banks and non-banking
+    finance companies.'
+  topic: safety-regulation
+  source_urls:
+  - https://investor.sebi.gov.in/pdf/downloadable-documents/Financial%20Education%20Booklet%20-%20English.pdf
+  related_articles:
+  - indian-financial-regulators
+  last_verified_at: '2026-11-17'
+- term: IRDAI
+  definition: The Insurance Regulatory and Development Authority of India, the regulator of insurance companies
+    and insurance products.
+  topic: safety-regulation
+  source_urls:
+  - https://investor.sebi.gov.in/pdf/downloadable-documents/Financial%20Education%20Booklet%20-%20English.pdf
+  related_articles:
+  - indian-financial-regulators
+  last_verified_at: '2026-11-17'
+- term: PFRDA
+  definition: The Pension Fund Regulatory and Development Authority, the regulator of the National Pension System.
+  topic: safety-regulation
+  source_urls:
+  - https://investor.sebi.gov.in/pdf/downloadable-documents/Financial%20Education%20Booklet%20-%20English.pdf
+  related_articles:
+  - indian-financial-regulators
+  last_verified_at: '2026-11-17'
+- term: AMFI
+  definition: 'The Association of Mutual Funds in India: the industry body of mutual fund companies, which runs
+    investor education.'
+  topic: safety-regulation
+  source_urls:
+  - https://www.amfiindia.com/uploads/AMFI_Understanding_Mutual_Funds_IAP_Booklet_Final_Website_version_860a5b77aa.pdf
+  related_articles:
+  - mutual-funds-and-etfs
+  last_verified_at: '2026-11-17'
+- term: SCORES
+  aliases:
+  - sebi scores
+  definition: SEBI's online complaint redress system for the securities market. Complaints are lodged on the portal
+    after first approaching the company or intermediary.
+  topic: safety-regulation
+  source_urls:
+  - https://scores.sebi.gov.in/
+  related_articles:
+  - investor-grievance-channels
+  last_verified_at: '2026-11-17'
+- term: Bull market
+  definition: A phase in which stock prices are rising and investors are optimistic.
+  topic: behaviour-risk
+  source_urls:
+  - https://investor.sebi.gov.in/bullandbeermarket.html
+  related_articles:
+  - corrections-bear-markets-and-recovery
+  last_verified_at: '2026-11-17'
+- term: Bear market
+  definition: A phase in which stock prices are falling and investors are pessimistic.
+  topic: behaviour-risk
+  source_urls:
+  - https://investor.sebi.gov.in/bullandbeermarket.html
+  related_articles:
+  - corrections-bear-markets-and-recovery
+  last_verified_at: '2026-11-17'
+- term: Market correction
+  aliases:
+  - correction
+  definition: A shorter and usually smaller fall in prices after a rise, described as a temporary reversal of trend.
+  topic: behaviour-risk
+  source_urls:
+  - https://investor.sebi.gov.in/bullandbeermarket.html
+  related_articles:
+  - corrections-bear-markets-and-recovery
+  last_verified_at: '2026-11-17'
+- term: Drawdown
+  definition: The fall in value from a peak to a later low, usually shown as a percentage.
+  topic: behaviour-risk
+  source_urls:
+  - https://investor.sebi.gov.in/bullandbeermarket.html
+  related_articles:
+  - corrections-bear-markets-and-recovery
+  last_verified_at: '2026-11-17'
+- term: Survivorship bias
+  definition: A distortion in which only funds or companies that survived are counted, so past results look better
+    than the whole group's real experience.
+  topic: behaviour-risk
+  source_urls:
+  - https://www.investor.gov/introduction-investing/general-resources/news-alerts/alerts-bulletins/investor-bulletins-72
+  related_articles:
+  - past-performance-and-survivorship-bias
+  last_verified_at: '2026-11-17'
+- term: Disposition effect
+  definition: The tendency to hold on to losing investments too long and sell winning investments too soon.
+  topic: behaviour-risk
+  source_urls:
+  - https://www.investor.gov/introduction-investing/general-resources/news-alerts/alerts-bulletins/investor-bulletins-72
+  related_articles:
+  - cognitive-biases
+  last_verified_at: '2026-11-17'
+- term: FOMO
+  aliases:
+  - fear of missing out
+  definition: 'Fear of missing out: the urge to buy an investment because others seem to be profiting from it, even
+    without understanding it.'
+  topic: behaviour-risk
+  source_urls:
+  - https://www.investor.gov/introduction-investing/general-resources/news-alerts/alerts-bulletins/investor-bulletins-72
+  related_articles:
+  - fomo-and-herd-behaviour
+  last_verified_at: '2026-11-17'
+- term: Ponzi scheme
+  definition: A fraud that promises high returns and pays earlier investors with money from newer ones, rather than
+    from real profits. It collapses when new money slows.
+  topic: behaviour-risk
+  source_urls:
+  - https://investor.sebi.gov.in/cautiontoinvestor.html
+  related_articles:
+  - investor-scams-and-unrealistic-returns
+  last_verified_at: '2026-11-17'

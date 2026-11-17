@@ -1,8 +1,8 @@
 ---
 article_id: risk-vs-return
-title: Understanding Risk and Return
+title: "Understanding Risk and Return"
 topic: foundations
-summary: Why expected returns and uncertainty are linked, and what "risk" actually means in an investing context beyond "something bad might happen."
+summary: "Why expected returns and uncertainty are linked, and what \"risk\" actually means in an investing context beyond \"something bad might happen.\""
 source_urls:
   - https://www.investor.gov/introduction-investing/investing-basics/what-risk
   - https://www.amfiindia.com/uploads/AMFI_Understanding_Mutual_Funds_IAP_Booklet_Final_Website_version_860a5b77aa.pdf
