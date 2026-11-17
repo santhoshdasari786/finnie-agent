@@ -1,0 +1,54 @@
+(ai-finance-assistant) dssanthosh@Ds-MacBook-Pro ai_finance_assistant % python -m src.rag.retrieval.cli "what is rupee cost averaging?" --config src/config/rag.yaml
+
+ok best: 0.6584807634353638
+0.658  What Is Compounding?  [compound-interest:3:03271d98]
+      "### A Second, Officially-Sourced Example: Cost of Delay\n\nAMFI's own investor education booklet gives"
+0.651  Expense Ratios and the Impact of Fees  [expense-ratios-and-fees:7:a28a8d0b]
+      '## Misconceptions\n\n- A fee that sounds small (e.g. "just 1%") is deducted every year the money is in'
+0.649  Understanding Risk and Return  [risk-vs-return:2:33bd98b6]
+      '- **Risk**, in investing, usually means the uncertainty or variability of returns — not simply "chan'
+0.649  What Is Compounding?  [compound-interest:2:190e51d7]
+      '## Worked Example\n\nA hypothetical ₹10,000 investment growing at an **assumed** 8% annually, compound'
+0.645  Expense Ratios and the Impact of Fees  [expense-ratios-and-fees:6:3fa69a13]
+      "## Worked Example\n\nIllustrative only — demonstrates the mechanism, not a specific real product's fig"
+(ai-finance-assistant) dssanthosh@Ds-MacBook-Pro ai_finance_assistant % python -m src.rag.retrieval.cli "what is rupee cost averaging?" --config src/config/rag.yaml
+
+ok best: 0.6584807634353638
+0.658  What Is Compounding?  [compound-interest:3:03271d98]
+      "### A Second, Officially-Sourced Example: Cost of Delay\n\nAMFI's own investor education booklet gives"
+0.651  Expense Ratios and the Impact of Fees  [expense-ratios-and-fees:7:a28a8d0b]
+      '## Misconceptions\n\n- A fee that sounds small (e.g. "just 1%") is deducted every year the money is in'
+0.649  Understanding Risk and Return  [risk-vs-return:2:33bd98b6]
+      '- **Risk**, in investing, usually means the uncertainty or variability of returns — not simply "chan'
+0.649  What Is Compounding?  [compound-interest:2:190e51d7]
+      '## Worked Example\n\nA hypothetical ₹10,000 investment growing at an **assumed** 8% annually, compound'
+0.645  Expense Ratios and the Impact of Fees  [expense-ratios-and-fees:6:3fa69a13]
+      "## Worked Example\n\nIllustrative only — demonstrates the mechanism, not a specific real product's fig"
+(ai-finance-assistant) dssanthosh@Ds-MacBook-Pro ai_finance_assistant % python -m src.rag.retrieval.cli "what is rupee cost averaging?" --config src/config/rag.yaml
+
+Traceback (most recent call last):
+  File "<frozen runpy>", line 198, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+  File "/Users/dssanthosh/workspace/santhosh-workspace/ik-workspace/ik-updated-classes/week-12/capstone-project/ai_finance_assistant/src/rag/retrieval/cli.py", line 39, in <module>
+    main()
+  File "/Users/dssanthosh/workspace/santhosh-workspace/ik-workspace/ik-updated-classes/week-12/capstone-project/ai_finance_assistant/src/rag/retrieval/cli.py", line 29, in main
+    processors = [build("postprocessor", s) for s in rcfg.pop("post_processors", [])]
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/dssanthosh/workspace/santhosh-workspace/ik-workspace/ik-updated-classes/week-12/capstone-project/ai_finance_assistant/src/rag/common/factory.py", line 12, in build
+    raise ValueError(f"Unknown {kind} '{name}'. Available: {sorted(_REGISTRY[kind])}") from None
+ValueError: Unknown postprocessor 'dedupe'. Available: ['per_doc_cap', 'threshold']
+(ai-finance-assistant) dssanthosh@Ds-MacBook-Pro ai_finance_assistant % 
+(ai-finance-assistant) dssanthosh@Ds-MacBook-Pro ai_finance_assistant % 
+(ai-finance-assistant) dssanthosh@Ds-MacBook-Pro ai_finance_assistant % python -m src.rag.retrieval.cli "what is rupee cost averaging?" --config src/config/rag.yaml
+
+ok best: 0.6584807634353638
+0.658  What Is Compounding?  [compound-interest:3:03271d98]
+      "### A Second, Officially-Sourced Example: Cost of Delay\n\nAMFI's own investor education booklet gives"
+0.651  Expense Ratios and the Impact of Fees  [expense-ratios-and-fees:7:a28a8d0b]
+      '## Misconceptions\n\n- A fee that sounds small (e.g. "just 1%") is deducted every year the money is in'
+0.649  Understanding Risk and Return  [risk-vs-return:2:33bd98b6]
+      '- **Risk**, in investing, usually means the uncertainty or variability of returns — not simply "chan'
+0.649  What Is Compounding?  [compound-interest:2:190e51d7]
+      '## Worked Example\n\nA hypothetical ₹10,000 investment growing at an **assumed** 8% annually, compound'
+0.645  Expense Ratios and the Impact of Fees  [expense-ratios-and-fees:6:3fa69a13]
+      "## Worked Example\n\nIllustrative only — demonstrates the mechanism, not a specific real product's fig"

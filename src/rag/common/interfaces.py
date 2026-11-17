@@ -1,0 +1,56 @@
+# core/interfaces.py
+from src.rag.common.models import Chunk, CollectionInfo, Document, EmbeddedChunk, GlossaryMatch, RetrievalQuery, RetrievalResult, RetrievedChunk, SearchHit
+from typing import Protocol, Iterator
+
+class DocumentLoader(Protocol):
+    def load(self) -> Iterator[Document]: ...          # streaming, not a list
+
+class Cleaner(Protocol):
+    def clean(self, doc: Document) -> Document: ...
+
+class Chunker(Protocol):
+    def chunk(self, doc: Document) -> list[Chunk]: ...
+
+class Embedder(Protocol):
+    @property
+    def model_id(self) -> str: ...                     # recorded with every vector
+    @property
+    def dimensions(self) -> int: ...
+    @property
+    def max_batch_size(self) -> int: ...
+    def embed_documents(self, texts: list[str], titles: list[str | None] | None = None) -> list[list[float]]: ...
+    def embed_query(self, text: str) -> list[float]: ...
+
+
+class VectorStore(Protocol):
+    # lifecycle
+    def ensure_collection(self, name: str, dimensions: int, metadata: dict) -> None: ...
+    def drop_collection(self, name: str) -> None: ...
+    def collection_info(self, name: str) -> CollectionInfo | None: ...  # dims, model_id, count
+
+    # write
+    def upsert(self, items: list[EmbeddedChunk]) -> None: ...
+    def delete_by_doc(self, doc_id: str) -> None: ...
+
+    # read (the retriever uses this later)
+    def search(self, name: str, vector: list[float], k: int,
+               filters: dict | None = None) -> list[SearchHit]: ...
+
+    def ensure_collection(self, dimensions: int, model_id: str) -> None: ...
+
+class Manifest(Protocol):
+    def get_hash(self, doc_id: str) -> str | None: ...
+    def record(self, doc_id: str, content_hash: str, model_id: str, n_chunks: int) -> None: ...
+
+# RETRIVAL
+
+class Retriever(Protocol):
+    def retrieve(self, query: RetrievalQuery) -> RetrievalResult: ...
+
+class PostProcessor(Protocol):         # filters / reorders a candidate list
+    def process(self, query: RetrievalQuery, hits: list[RetrievedChunk]) -> list[RetrievedChunk]: ...
+
+
+# common/interfaces.py
+class GlossaryLookup(Protocol):
+    def lookup(self, question: str) -> GlossaryMatch | None: ...

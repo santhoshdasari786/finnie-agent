@@ -1,0 +1,11 @@
+.venv/
+.env
+__pycache__/
+*.pyc
+.pytest_cache/
+chroma_db/
+.ipynb_checkpoints/
+
+# React app
+src/web_app/node_modules/
+src/web_app/dist/

@@ -1,0 +1,30 @@
+# src/config/app.yaml: application-level settings (RAG stays in rag.yaml, the LLM in config.yaml)
+workflow:
+  router:
+    model: null                 # null = LLMFactory default; or {provider, model} for a smaller classifier
+    confidence_threshold: 0.6
+    history_turns: 6
+  memory:
+    backend: memory             # memory | sqlite
+  timeouts_seconds:
+    llm: 30
+    market: 10
+    kite: 60
+
+market_data:
+  providers: [yfinance, kite]   # priority order; alpha_vantage optional, last
+  cache_ttl_seconds: 1800
+  default_exchange: NSE
+
+portfolio:
+  default_source: sample        # sample | csv | kite | manual
+  sample_path: ./data/sample_portfolio.csv
+
+agents:
+  finance_qa:    { profile: general }
+  tax_education: { profile: tax, category: costs-taxes }
+
+mcp_server:
+  transport: stdio
+  expose_tools: [ask_finance, explain_term, search_knowledge_base, get_quote,
+                 get_price_history, plan_goal, analyze_portfolio, portfolio_login]

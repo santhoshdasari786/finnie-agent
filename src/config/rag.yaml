@@ -1,0 +1,79 @@
+# config/rag.yaml
+pipeline:
+  batch_size: 64              # chunks per embedding call (capped by embedder.max_batch_size)
+  # concurrency: 4              # parallel embedding batches
+  on_error: skip_and_log      # skip_and_log | fail_fast
+  # dry_run: false
+
+sources:
+  - type: markdown
+    path: ./docs/knowledge-base/articles
+    glob: "**/*.md"
+  # - type: pdf
+  #   path: ./knowledge_base/reports
+  # - type: web
+  #   urls_file: ./knowledge_base/urls.txt
+
+# cleaners:
+#   - type: whitespace
+#   - type: boilerplate
+#     params: { strip_headers_footers: true }
+
+chunker:
+  type: recursive
+  chunk_size: 800           # tokens or chars; decide and document which
+  chunk_overlap: 100
+  # separators: ["\n## ", "\n\n", "\n", ". "]
+
+embedder:
+  type: gemini
+  model: gemini-embedding-2
+  output_dimensionality: 768
+  api_key_env: GOOGLE_API_KEY      # name of the env var, never the key itself
+  document_prefix: "title: {title} | text: {text}"
+  query_prefix: "task: search result | query: {text}"
+  # rate_limit:
+  #   requests_per_minute: 100
+  #   tokens_per_minute: 30000
+  # retry:
+  #   max_attempts: 5
+  #   backoff_base_seconds: 2
+  #   backoff_max_seconds: 60
+
+vector_store:
+  type: chroma
+  collection: finance_kb
+  path: ./.vectorstore/chroma
+  # distance: cosine
+
+manifest:
+  type: sqlite
+  path: ./.vectorstore/manifest.db
+
+logging:
+  level: INFO
+
+
+# src/config/rag.yaml
+retrieval:
+  type: vector
+  # k: 5
+  fetch_multiplier: 4
+  category_field: topic
+  post_processors:
+    - { type: threshold, min_score: 0.66 }
+    - { type: dedupe, similarity: 0.9 }
+    - { type: per_doc_cap, max_per_doc: 2 }
+
+glossary:
+  type: yaml
+  path: ./docs/knowledge-base/glossary.yaml
+  fuzzy_cutoff: 0.0        # 0 = exact + alias only
+
+
+qa:
+  k: 5
+  max_question_chars: 500
+  max_context_chars: 6000        # cap total context sent to the LLM
+  disclaimer: "Educational information only — not financial advice."
+  # no_source_message: 

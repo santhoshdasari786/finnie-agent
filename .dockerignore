@@ -1,0 +1,15 @@
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+.env
+.envrc
+.git/
+tests/
+docs/
+README.md
+*.log
+
+# React app — separate frontend, not part of this Python image
+src/web_app/
+node_modules/

@@ -1,0 +1,24 @@
+- term: Exchange-traded fund
+  aliases: [ETF, ETFs, exchange traded fund]
+  definition: >
+    A fund that holds a basket of securities and trades on a stock exchange
+    throughout the day, like a share.
+  topic: products
+  source_urls: ["https://www.investor.gov/..."]
+  related_articles: [mutual-funds-and-etfs]
+  last_verified_at: "2026-10-23"
+
+- term: Expense ratio
+  aliases: [TER, total expense ratio]
+  definition: >
+    The annual fee a fund charges, as a percentage of the money invested.
+  topic: costs-taxes
+  related_articles: [expense-ratios-and-fees]
+
+- term: Bond                       # same term, two senses → ambiguity handling
+  sense: fixed income
+  definition: A loan to a government or company that pays interest and returns the principal at maturity.
+  related_articles: [bonds-and-interest-rate-risk]
+- term: Bond
+  sense: surety / legal
+  definition: A written promise or guarantee to perform an obligation or pay a penalty.

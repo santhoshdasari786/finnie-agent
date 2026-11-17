@@ -1,0 +1,61 @@
+# Retrieval eval set. Three groups, one purpose: choose retrieval.min_score from evidence.
+#   in_kb      clearly covered by an article        -> must NOT be refused; `expect` = article_id that should rank first
+#   borderline finance-related, probably not covered -> informational: shows where the grey zone sits
+#   off_topic  not answerable from the KB at all     -> must be refused (no_source)
+# Edit freely: wrong `expect` values are findings, not mistakes. Add a question, re-run, read the table.
+
+in_kb:
+  - { q: "What is asset allocation and why does it matter?",              expect: asset-allocation }
+  - { q: "How should my mix of stocks and bonds change as I get older?",  expect: asset-allocation }
+  - { q: "Why do bond prices fall when interest rates rise?",             expect: bonds-and-interest-rate-risk }
+  - { q: "What is interest-rate risk in a bond fund?",                    expect: bonds-and-interest-rate-risk }
+  - { q: "What is the difference between CAGR and XIRR?",                 expect: cagr-vs-xirr }
+  - { q: "Which return measure should I use when I invest through a SIP?", expect: cagr-vs-xirr }
+  - { q: "How are capital gains taxed in India?",                         expect: capital-gains-tax-basics-india }
+  - { q: "What is the difference between short-term and long-term capital gains?", expect: capital-gains-tax-basics-india }
+  - { q: "How do I compare two investment products fairly?",              expect: comparing-investment-products-fairly }
+  - { q: "Why is comparing two funds on past returns alone misleading?",  expect: comparing-investment-products-fairly }
+  - { q: "What is compounding?",                                          expect: compound-interest }
+  - { q: "How much does starting late cost me because of compounding?",  expect: compound-interest }
+  - { q: "What is diversification?",                                      expect: diversification-and-correlation }
+  - { q: "Does owning many stocks always reduce my risk?",                expect: diversification-and-correlation }
+  - { q: "What is an expense ratio?",                                     expect: expense-ratios-and-fees }
+  - { q: "How do small fund fees add up over 20 years?",                  expect: expense-ratios-and-fees }
+  - { q: "What is inflation and how does it affect my savings?",          expect: inflation-and-purchasing-power }
+  - { q: "Why does my money buy less over time?",                         expect: inflation-and-purchasing-power }
+  - { q: "How can I recognise an investment scam?",                       expect: investor-scams-and-unrealistic-returns }
+  - { q: "Is a promise of guaranteed 30% monthly returns realistic?",     expect: investor-scams-and-unrealistic-returns }
+  - { q: "What is the difference between a mutual fund and an ETF?",      expect: mutual-funds-and-etfs }
+  - { q: "How does an ETF trade compared with a mutual fund?",            expect: mutual-funds-and-etfs }
+  - { q: "What is the difference between nominal and real returns?",      expect: nominal-vs-real-returns }
+  - { q: "If my fund gave 8% and inflation was 6%, what is my real return?", expect: nominal-vs-real-returns }
+  - { q: "What should I look at in a mutual fund factsheet?",             expect: reading-a-mutual-fund-factsheet }
+  - { q: "What does the portfolio turnover ratio in a factsheet tell me?", expect: reading-a-mutual-fund-factsheet }
+  - { q: "What is the relationship between risk and return?",             expect: risk-vs-return }
+  - { q: "Why do higher expected returns come with higher risk?",         expect: risk-vs-return }
+  - { q: "How does a SIP work?",                                          expect: sips-and-periodic-investing }
+  - { q: "What is rupee-cost averaging and does it guarantee profit?",    expect: sips-and-periodic-investing }
+
+borderline:
+  - { q: "What is the current LTCG tax rate on equity mutual funds?" }
+  - { q: "Which mutual fund should I buy this year?" }
+  - { q: "What is the interest rate on PPF?" }
+  - { q: "How does a credit score work?" }
+  - { q: "What is the difference between NPS and EPF?" }
+  - { q: "What is a P/E ratio?" }
+  - { q: "Explain how options trading works" }
+  - { q: "Should I invest in gold or in equity?" }
+  - { q: "What is a REIT?" }
+  - { q: "How do I file my income tax return?" }
+
+off_topic:
+  - { q: "What is the weather in Mumbai today?" }
+  - { q: "Who won the cricket match yesterday?" }
+  - { q: "Give me a recipe for paneer butter masala" }
+  - { q: "What was the Nifty 50 close yesterday?" }
+  - { q: "What is the share price of Reliance right now?" }
+  - { q: "What is the price of Bitcoin today?" }
+  - { q: "What is the capital of France?" }
+  - { q: "Write a Python function to reverse a string" }
+  - { q: "Translate good morning into Hindi" }
+  - { q: "How do I fix a flat bicycle tyre?" }
