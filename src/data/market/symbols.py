@@ -16,3 +16,16 @@ def extract_instruments(text: str) -> list[Instrument]:
         if sym not in _NOT_TICKERS:
             found[Instrument(symbol=sym)] = None
     return list(found)
+
+
+_ALIASES = {"NIFTY": "NIFTY50", "NIFTY50": "NIFTY50", "^NSEI": "NIFTY50", "SENSEX": "SENSEX", "^BSESN": "SENSEX"}
+_PLAIN = re.compile(r"[A-Z0-9&-]{1,20}")
+
+
+def resolve_instrument(text: str) -> Instrument | None:
+    """One user-typed symbol -> an Instrument, or None when we cannot (or must not) look it up."""
+    s = (text or "").strip().upper()
+    if s in _ALIASES:
+        return Instrument(symbol=_ALIASES[s], exchange="INDEX")
+    return Instrument(symbol=s) if _PLAIN.fullmatch(s) else None
+

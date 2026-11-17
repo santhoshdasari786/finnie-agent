@@ -3,14 +3,17 @@ import logging
 import uuid
 from contextlib import asynccontextmanager
 
-from fastapi import FastAPI, Path, Request, Response
+from fastapi import FastAPI, HTTPException, Path, Query, Request, Response
 from fastapi.encoders import jsonable_encoder
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 
 from src.api.locks import ThreadLocks
-from src.api.schemas import SAFE_META, THREAD_ID_PATTERN, AgentInfo, ChatRequest, ChatResponse
+from src.api.schemas import (SAFE_META, SYMBOL_PATTERN, THREAD_ID_PATTERN, AgentInfo, ChatRequest, ChatResponse,
+                             HistoryOut, HistoryRange)
 from src.core.contracts import AgentResult
+from src.data.market.history import summarize
+from src.data.market.symbols import resolve_instrument
 from src.workflow.graph import ask
 from src.workflow.state import AGENT_NAMES
 
@@ -18,6 +21,7 @@ log = logging.getLogger(__name__)
 
 DEFAULT_ORIGINS = ["http://localhost:5173", "http://127.0.0.1:5173"]      # the React dev server
 SERVER_ERROR = "Something went wrong on the server. Please try again."
+HISTORY_ERROR = "I couldn't load price history right now. Please try again."
 
 
 def _default_build():
@@ -71,6 +75,25 @@ def create_app(runtime=None, build=None, cors_origins: list[str] | None = None) 
         async with request.app.state.locks.hold(thread_id):
             result = await ask(request.app.state.runtime.graph, body.message, thread_id=thread_id, agent=body.agent)
         return to_response(thread_id, result)
+
+    @app.get("/market/history", response_model=HistoryOut)
+    async def market_history(request: Request, symbol: str = Query(pattern=SYMBOL_PATTERN),
+                             rng: HistoryRange = Query("3m", alias="range")):
+        instrument = resolve_instrument(symbol)
+        if instrument is None:
+            raise HTTPException(422, "Unsupported symbol. Use a stock ticker such as TCS, or one of: Nifty 50, Sensex.")
+        provider = getattr(request.app.state.runtime.agents.get("market_analysis"), "provider", None)
+        if not callable(getattr(provider, "history", None)):
+            return JSONResponse({"error": "Price history is not available on this server."}, status_code=503)
+        try:
+            history = await provider.history(instrument, rng)
+        except Exception:
+            log.exception("price history failed")
+            return JSONResponse({"error": HISTORY_ERROR}, status_code=502)
+        if history is None or len(history.points) < 2:
+            return JSONResponse({"error": f"I couldn't find price history for {instrument.symbol}."}, status_code=404)
+        return summarize(history)
+
 
     @app.delete("/sessions/{thread_id}", status_code=204)
     async def end_session(request: Request, thread_id: str = Path(pattern=THREAD_ID_PATTERN)):

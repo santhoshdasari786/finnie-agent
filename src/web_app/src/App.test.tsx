@@ -17,6 +17,7 @@ function fakeApi(over: Partial<Api> = {}): Api & { chats: ChatRequest[]; ended: 
     },
     agents: async () => [{ name: "finance_qa", ready: true }, { name: "news_synthesizer", ready: false }],
     endSession: async (id) => { ended.push(id); },
+    marketHistory: async () => { throw new Error("not used here"); },
     ...over,
   };
 }

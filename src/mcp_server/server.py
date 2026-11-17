@@ -35,8 +35,8 @@ def build_goal_question(*, horizon_years: float, target_amount: float | None, mo
                         starting_balance: float | None, risk_appetite: str | None,
                         annual_return_pct: float | None) -> str:
     """Structured arguments, written as the sentence a person would say, for the Goal Planning agent."""
-    head = (f"Can I reach {target_amount:.0f} rupees in {horizon_years:g} years" if target_amount
-            else f"What will I have in {horizon_years:g} years")
+    head = ("New goal: " + (f"Can I reach {target_amount:.0f} rupees in {horizon_years:g} years" if target_amount
+                           else f"What will I have in {horizon_years:g} years"))
     if monthly_contribution:
         head += f", saving {monthly_contribution:.0f} rupees a month"
     if starting_balance:

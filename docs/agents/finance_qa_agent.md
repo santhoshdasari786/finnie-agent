@@ -1,6 +1,6 @@
 # Finance Q&A Agent
 
-**Status:** Planned · **File (planned):** `src/agents/finance_qa_agent.py` · **Rubric ties:** Educational Content (8%), RAG Implementation (8%)
+**Status:** Implemented (the design below is the original brainstorm; the code and `tests/agents/financeqaagents/` are the source of truth) · **File:** `src/agents/finance_qa_agent.py` · **Rubric ties:** Educational Content (8%), RAG Implementation (8%)
 
 ## Purpose & Scope
 

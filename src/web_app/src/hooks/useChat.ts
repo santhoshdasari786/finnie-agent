@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { ApiError, api as defaultApi, type Api } from "../api/client";
-import type { Message } from "../api/types";
+import type { AgentName, ChatResponse, Message } from "../api/types";
 import { loadSession, saveSession, type SavedSession } from "../session";
 
 let counter = 0;
@@ -19,15 +19,20 @@ export function useChat(api: Api = defaultApi) {
   }, [messages]);
 
   const run = useCallback(
-    async (text: string, addUserMessage: boolean) => {
-      if (busy.current) return;
+    async (text: string, addUserMessage: boolean, agent?: AgentName): Promise<ChatResponse | null> => {
+      if (busy.current) return null;
       busy.current = true;
       setPending(true);
       if (addUserMessage) setMessages((m) => [...m, { id: nextId(), role: "user", text }]);
       try {
-        const res = await api.chat({ message: text, ...(threadId.current ? { thread_id: threadId.current } : {}) });
+                const res = await api.chat({
+          message: text,
+          ...(threadId.current ? { thread_id: threadId.current } : {}),
+          ...(agent ? { agent } : {}),
+        });
         threadId.current = res.thread_id;
         setMessages((m) => [...m, { id: nextId(), role: "assistant", response: res }]);
+        return res;
       } catch (e) {
         const known = e instanceof ApiError ? e : null;
         setMessages((m) => [
@@ -37,8 +42,10 @@ export function useChat(api: Api = defaultApi) {
             role: "error",
             text: known ? known.message : "Something went wrong. Please try again.",
             retryText: known && !known.retryable ? null : text,
+            retryAgent: agent ?? null, 
           },
         ]);
+        return null;
       } finally {
         busy.current = false;
         setPending(false);
@@ -48,9 +55,9 @@ export function useChat(api: Api = defaultApi) {
   );
 
   const send = useCallback(
-    async (raw: string) => {
+    async (raw: string, agent?: AgentName): Promise<ChatResponse | null> => {
       const text = raw.trim();
-      if (text) await run(text, true);
+      return text ? run(text, true, agent) : null;
     },
     [run],
   );
@@ -59,7 +66,7 @@ export function useChat(api: Api = defaultApi) {
     const failed = [...messages].reverse().find((m) => m.role === "error");
     if (!failed || failed.role !== "error" || !failed.retryText) return;
     setMessages((m) => m.filter((x) => x.id !== failed.id));
-    await run(failed.retryText, false);
+    await run(failed.retryText, false, failed.retryAgent ?? undefined);
   }, [messages, run]);
 
   const newChat = useCallback(async () => {

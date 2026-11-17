@@ -1,4 +1,4 @@
-from typing import Any
+from typing import Any, Literal
 
 from pydantic import BaseModel, Field, field_validator
 
@@ -45,3 +45,26 @@ class ChatResponse(BaseModel):
 class AgentInfo(BaseModel):
     name: str
     ready: bool
+
+
+HistoryRange = Literal["1m", "3m", "6m", "1y"]
+SYMBOL_PATTERN = r"^[A-Za-z0-9&^.\-]{1,20}$"
+
+
+class HistoryPoint(BaseModel):
+    date: str
+    close: float
+
+
+class HistoryOut(BaseModel):
+    symbol: str
+    name: str
+    range: HistoryRange
+    currency: str
+    source: str
+    as_of: str
+    points: list[HistoryPoint]
+    latest: float
+    change_pct: float | None
+    high: float
+    low: float

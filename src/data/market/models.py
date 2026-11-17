@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import date, datetime
 from typing import Literal
 from pydantic import BaseModel
 
@@ -15,3 +15,16 @@ class Quote(BaseModel):
     as_of: datetime
     source: str                                   # "yfinance"; agents must show this
     stale: bool = False
+
+class PricePoint(BaseModel):
+    date: date
+    close: float
+
+
+class PriceHistory(BaseModel):
+    instrument: Instrument
+    range: str                                    # "1m" | "3m" | "6m" | "1y"
+    currency: str
+    points: list[PricePoint]                      # oldest first, one per trading day
+    as_of: datetime
+    source: str

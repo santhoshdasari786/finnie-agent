@@ -17,7 +17,7 @@ This project is also an MCP *client* (the Portfolio agent talks to Kite's MCP se
 | `ask_finance` | `question` (1 to 2000 chars), optional `thread_id` | the whole graph: guards, router, memory, any agent |
 | `explain_term` | `term` (1 to 80) | "What is X?" to the Q&A agent |
 | `get_quote` | `symbols` (1 to 10) | the Market agent. `^NSEI`, `NIFTY`, `NIFTY50` become "Nifty 50"; `^BSESN`, `SENSEX` become "Sensex"; any other `^` index is refused, because the agent supports only these two |
-| `plan_goal` | `horizon_years` (0 to 60), then at least one of `target_amount`, `monthly_contribution`, `starting_balance`; optional `risk_appetite`, `annual_return_pct` (0 to 30) | the arguments are written as one sentence for the Goal agent |
+| `plan_goal` | `horizon_years` (0 to 60), then at least one of `target_amount`, `monthly_contribution`, `starting_balance`; optional `risk_appetite`, `annual_return_pct` (0 to 30) | the arguments are written as one sentence for the Goal agent, starting "New goal:" so numbers remembered from an earlier goal are not reused |
 | `analyze_portfolio` | `source`: `sample` or `kite` | `connect <source>`, then `analyze my portfolio`. A connection that is not `ok` (for example `needs_login`) is returned as it is, with its link |
 | `portfolio_login` | none | `connect kite`; returns the OAuth link |
 

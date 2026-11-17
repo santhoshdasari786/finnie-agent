@@ -1,4 +1,4 @@
-import type { AgentInfo, ChatRequest, ChatResponse } from "./types";
+import type { AgentInfo, ChatRequest, ChatResponse, HistoryRange, MarketHistory } from "./types";
 
 export class ApiError extends Error {
   readonly status?: number;
@@ -16,6 +16,7 @@ export interface Api {
   chat(req: ChatRequest): Promise<ChatResponse>;
   agents(): Promise<AgentInfo[]>;
   endSession(threadId: string): Promise<void>;
+  marketHistory(symbol: string, range: HistoryRange): Promise<MarketHistory>;
 }
 
 const DEFAULT_BASE = import.meta.env.VITE_API_URL ?? "http://localhost:8000";
@@ -28,6 +29,22 @@ function looksLikeChatResponse(x: unknown): x is ChatResponse {
     typeof r.text === "string" && typeof r.disclaimer === "string" && Array.isArray(r.citations)
   );
 }
+
+const isStr = (x: unknown) => typeof x === "string";
+const isNum = (x: unknown) => typeof x === "number" && Number.isFinite(x);
+
+function looksLikeHistory(x: unknown): x is MarketHistory {
+  const r = x as Record<string, unknown> | null;
+  if (typeof r !== "object" || r === null) return false;
+  const points = r.points;
+  return (
+    isStr(r.symbol) && isStr(r.name) && isStr(r.range) && isStr(r.currency) && isStr(r.source) && isStr(r.as_of) &&
+    isNum(r.latest) && isNum(r.high) && isNum(r.low) && (r.change_pct === null || isNum(r.change_pct)) &&
+    Array.isArray(points) &&
+    points.every((p) => typeof p === "object" && p !== null && isStr((p as Record<string, unknown>).date) && isNum((p as Record<string, unknown>).close))
+  );
+}
+
 
 async function toError(res: Response): Promise<ApiError> {
   const generic = `The server returned an error (${res.status}).`;
@@ -85,6 +102,18 @@ export function createApi(
     async agents() {
       return (await (await request("/agents")).json()) as AgentInfo[];
     },
+    async marketHistory(symbol, range) {
+      const res = await request(`/market/history?symbol=${encodeURIComponent(symbol)}&range=${range}`);
+      let body: unknown;
+      try {
+        body = await res.json();
+      } catch {
+        throw new ApiError("The server sent an unexpected reply.");
+      }
+      if (!looksLikeHistory(body)) throw new ApiError("The server sent an unexpected reply.");
+      return body;
+    },
+
     async endSession(threadId) {
       await request(`/sessions/${encodeURIComponent(threadId)}`, { method: "DELETE" });
     },

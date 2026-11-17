@@ -29,6 +29,11 @@ class MarketAnalysisAgent:
         self._llm = llm or LLMFactory.get_default()
         self._s = settings or QASettings()
 
+    @property
+    def provider(self):
+        return self._provider
+
+
     def _result(self, status, text, **kw):
         return AgentResult(agent=self.name, status=status, text=text, disclaimer=self._s.disclaimer, **kw)
 

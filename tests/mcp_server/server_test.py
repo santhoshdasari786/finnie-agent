@@ -272,6 +272,11 @@ async def test_the_goal_sentence_carries_every_number():
     for piece in ["5000000", "10 years", "20000", "100000", "aggressive", "12%"]:
         assert piece in q
 
+async def test_the_sentence_starts_a_new_goal_so_earlier_numbers_do_not_leak_in():
+    q = build_goal_question(horizon_years=10, target_amount=None, monthly_contribution=20000, starting_balance=None,
+                            risk_appetite=None, annual_return_pct=None)
+    assert q.startswith("New goal: ")
+
 async def test_the_sentence_leaves_out_what_was_not_given():
     q = build_goal_question(horizon_years=10, target_amount=None, monthly_contribution=20000, starting_balance=None,
                             risk_appetite=None, annual_return_pct=None)

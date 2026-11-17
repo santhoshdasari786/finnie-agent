@@ -118,3 +118,9 @@ async def test_llm_failure_still_returns_the_numbers(provider, llm):
 async def test_blank_llm_reply_returns_just_the_facts(provider):
     r = await MarketAnalysisAgent(provider, llm=FakeLLM("   ")).run("Nifty close today")
     assert r.status == "ok" and r.text.startswith("- NIFTY50") and not r.text.endswith("\n")
+
+
+# ---------------------------------------------------------------- the provider is public (the API's history route uses it)
+async def test_the_agent_exposes_its_provider():
+    provider = object()
+    assert MarketAnalysisAgent(provider, llm=object()).provider is provider

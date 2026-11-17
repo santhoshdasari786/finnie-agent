@@ -1,6 +1,6 @@
 # Router (Supervisor) Agent and Workflow
 
-**Status:** Planned · **Files (planned):** `src/workflow/state.py`, `router.py`, `nodes.py`, `graph.py` · **Rubric ties:** LangGraph Workflow (10%), Multi-Agent Architecture (10%), Conversational Flow (8%)
+**Status:** Implemented (router, classifier, memory v2; see `PROJECT_RECAP.md` for what the code does today, `tests/workflow/`) · **Files:** `src/workflow/state.py`, `router.py`, `nodes.py`, `graph.py` · **Rubric ties:** LangGraph Workflow (10%), Multi-Agent Architecture (10%), Conversational Flow (8%)
 
 ## Purpose & Scope
 

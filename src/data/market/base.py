@@ -1,9 +1,11 @@
 from typing import Protocol
-from src.data.market.models import Instrument, Quote
+from src.data.market.models import Instrument, PriceHistory, Quote
 
 class MarketDataProvider(Protocol):
     name: str
     async def quotes(self, instruments: list[Instrument]) -> list[Quote]: ...
+    async def history(self, instrument: Instrument, range: str) -> PriceHistory | None: ...
+
 
 PROVIDERS: dict[str, type] = {}
 

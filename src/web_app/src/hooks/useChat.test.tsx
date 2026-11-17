@@ -20,6 +20,9 @@ function fakeApi(over: Partial<Api> = {}): Api & { chats: ChatRequest[]; ended: 
     endSession: async (id) => {
       ended.push(id);
     },
+    marketHistory: async () => {
+      throw new Error("not used here");
+    },
     ...over,
   };
 }

@@ -111,3 +111,8 @@ Files: `src/core/goal_math.py` (pure maths), `src/agents/goal_planning_agent.py`
 - **Memory v2:** facts carry across turns and are labelled "(from earlier)"; a new value overrides an old one; "start over" clears them; a stated risk appetite is saved to the profile, and a bare "aggressive" after an answer recalculates it.
 - **Clarifications** say what is already known ("So far I have: ₹30,000 a month") and ask only for the missing piece.
 - **Not built:** the risk questionnaire from the decision above, inflation, step-up SIPs, composing with the Portfolio agent for a starting balance.
+
+## Additions (2026-11-17): chart data and "new goal"
+
+- **`data.paths`** (next to `data.plan`): one entry per scenario, `{name, annual_rate_pct, points: [{year, value}]}`, from `goal_math.balance_path` (a point per whole year from 0, plus the exact horizon if it is not whole). The last point equals the scenario's `projected`, so the Goals chart and the table can never disagree. Absent when the question is "how long will it take" (no horizon).
+- **"New goal" with numbers resets and plans in the same turn.** `new goal`, `start over`, `reset` or `forget my numbers` *with* numbers now ignores the numbers remembered from earlier, plans the new goal, and sets `meta.learned.slots_reset` so memory drops the old ones. Without numbers they still only clear. This matters for the Goals tab and the MCP `plan_goal` tool, which send complete statements: before this, a remembered horizon turned a "how long will it take" question into a 10-year projection ("10 years (from earlier)"). Follow-ups without those phrases ("what if I save more?") still carry numbers forward.

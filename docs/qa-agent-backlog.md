@@ -258,7 +258,7 @@ New implementation items from these docs:
 | # | Item | Detail | Priority | Status |
 |---|---|---|---|---|
 | M3 | More than two indexes | the Market agent knows Nifty 50 and Sensex only ("Nifty Bank" is read as Nifty 50). Add an index table to `symbols.py`, then relax `INDEX_NAMES` in the MCP server | P3 | open |
-| M4 | `get_price_history` | needs a `history()` call on the market provider (yfinance has it) | P3 | open |
+| M4 | `get_price_history` | the provider now has `history()` (2026-11-17, used by `GET /market/history`); exposing it as an MCP tool is the remaining step | P3 | open |
 | M5 | `search_knowledge_base` | raw passages; expose only with the input guard and a clear "source text, not advice" label | P3 | open |
 | M6 | HTTP transport for MCP | needs a per-client conversation id (the stdio default of one conversation per process would mix clients) | P3 | open |
 | M7 | Try it in Claude Desktop | manual: a concept question, a quote, a goal, the portfolio; screenshot for the demo | P2 | open |

@@ -9,7 +9,7 @@ from pydantic import BaseModel
 
 from src.common.models import QASettings
 from src.core.contracts import AgentContext, AgentResult, Turn
-from src.core.goal_math import RATES, plan_goal
+from src.core.goal_math import RATES, balance_path, plan_goal
 from src.core.llm import LLMFactory
 from src.core.responses import AgentResponse
 from src.core.grounding import is_grounded
@@ -198,9 +198,16 @@ class GoalPlanningAgent:
         return self._result("clarify", f"{prefix}{question}" + (f" {EXAMPLE}" if example else ""), meta=meta)
 
     async def run(self, query: str, ctx: AgentContext | None = None) -> AgentResult:
-        if RESET.search(query):
+        reset = bool(RESET.search(query))
+        if reset and not _HAS_NUMBERS.search(query):
             return self._result("clarify", f"Okay, I've cleared your goal numbers. {EXAMPLE}",
                                 meta={"awaiting": self.name, "learned": {"slots_reset": True}})
+        result = await self._plan(query, ctx, reset)
+        if reset and result.status != "error":              # "new goal: ..." with numbers: plan it, and forget the old ones
+            result.meta.setdefault("learned", {})["slots_reset"] = True
+        return result
+
+    async def _plan(self, query: str, ctx: AgentContext | None, reset: bool) -> AgentResult:
         try:
             g = await self._extractor.extract(query, ctx.history if ctx else [])
         except Exception:
@@ -211,7 +218,7 @@ class GoalPlanningAgent:
         if "annual_return_pct" in fresh and not _rate_in(query, fresh["annual_return_pct"]):
             log.info("ignored a return rate the user did not write: %r", fresh.pop("annual_return_pct"))
 
-        known = _clean_slots(ctx.slots if ctx else {})
+        known = {} if reset else _clean_slots(ctx.slots if ctx else {})
         if not fresh and _HAS_NUMBERS.search(query):
             return self._ask(["numbers"], "I couldn't make out the numbers in that. Could you write them out, "
                                           "for example \"I'm 35 and can save 20000 a month\"?", known, example=False)
@@ -277,8 +284,15 @@ class GoalPlanningAgent:
         if stated:
             learned["profile"] = {"risk_appetite": stated, "risk_source": "stated"}
 
-        return self._result("ok", text, data={"plan": asdict(plan), "inputs": g.model_dump()},
+        data = {"plan": asdict(plan), "inputs": g.model_dump()}
+        if plan.years is not None:
+            data["paths"] = [{"name": s.name, "annual_rate_pct": s.annual_rate_pct,
+                              "points": [{"year": y, "value": v}
+                                         for y, v in balance_path(plan.start, plan.monthly, s.annual_rate_pct, plan.years)]}
+                             for s in plan.scenarios]
+        return self._result("ok", text, data=data,
                             meta={"learned": learned, "summary": self._summary(plan, user_rate)})
+
 
     @staticmethod
     def _summary(p, user_rate: bool) -> str:

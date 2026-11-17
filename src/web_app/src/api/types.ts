@@ -47,4 +47,25 @@ export interface AgentInfo {
 export type Message =
   | { id: string; role: "user"; text: string }
   | { id: string; role: "assistant"; response: ChatResponse }
-  | { id: string; role: "error"; text: string; retryText: string | null };
+  | { id: string; role: "error"; text: string; retryText: string | null; retryAgent?: AgentName | null };
+
+export type HistoryRange = "1m" | "3m" | "6m" | "1y";
+
+export interface HistoryPoint {
+  date: string;
+  close: number;
+}
+
+export interface MarketHistory {
+  symbol: string;
+  name: string;
+  range: HistoryRange;
+  currency: string;
+  source: string;
+  as_of: string;
+  points: HistoryPoint[];
+  latest: number;
+  change_pct: number | null;
+  high: number;
+  low: number;
+}

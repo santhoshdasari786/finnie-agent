@@ -17,6 +17,15 @@ def future_value(start: float, monthly: float, annual_rate_pct: float, years: fl
     g = (1 + r) ** n
     return start * g + monthly * (g - 1) / r
 
+def balance_path(start: float, monthly: float, annual_rate_pct: float, years: float) -> list[tuple[float, float]]:
+    """(year, balance) at every whole year from 0, plus the exact horizon when it is not a whole number."""
+    if not math.isfinite(years) or not 0 < years <= MAX_YEARS:
+        raise ValueError(f"the horizon must be between 0 and {MAX_YEARS} years")
+    marks: list[float] = list(range(int(years) + 1))
+    if years != int(years):
+        marks.append(years)
+    return [(y, future_value(start, monthly, annual_rate_pct, y)) for y in marks]
+
 
 def required_monthly(target: float, start: float, annual_rate_pct: float, years: float) -> float:
     r, n = annual_rate_pct / 100 / 12, years * 12

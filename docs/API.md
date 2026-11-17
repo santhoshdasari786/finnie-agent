@@ -10,6 +10,7 @@ Run it: `.venv/bin/python -m uvicorn src.main:app --reload --port 8000`, then op
 |---|---|
 | `POST /chat` | one message in, one `AgentResult` out. The whole graph (guard, memory, router, agent) runs behind it |
 | `GET /agents` | the six agents and whether each is `ready` (for badges in the UI) |
+| `GET /market/history?symbol=TCS&range=3m` | daily closing prices for the Market tab's chart (see below). No graph, no memory, no login |
 | `DELETE /sessions/{thread_id}` | end a conversation: forget memory and pending questions, disconnect live portfolio sources. 204, also for an unknown id |
 | `GET /health` | liveness |
 
@@ -29,6 +30,18 @@ Run it: `.venv/bin/python -m uvicorn src.main:app --reload --port 8000`, then op
 - **`login_url`** is set only when `status` is `needs_login` (the Kite login link). The UI shows it as a button.
 - **`meta`** exposes only `retryable`, `awaiting` and `missing`. The internal `learned` and `summary` never leave the server.
 - An unexpected crash is **HTTP 500** `{"error": "Something went wrong on the server. Please try again."}`, with no stack trace. The cause is logged.
+
+### `GET /market/history`
+
+`symbol`: a stock ticker (`TCS`, `M&M`) or an index (`NIFTY`, `NIFTY50`, `^NSEI`, `SENSEX`, `^BSESN`). `range`: `1m`, `3m` (default), `6m` or `1y`.
+
+```json
+{ "symbol": "NIFTY50", "name": "Nifty 50", "range": "3m", "currency": "INR", "source": "yfinance",
+  "as_of": "2026-11-17T16:42:07+00:00", "points": [{"date": "2026-08-17", "close": 24280.1}, ...],
+  "latest": 25387.4, "change_pct": 4.53, "high": 25387.4, "low": 22231.8 }
+```
+
+`latest`, `high`, `low` and `change_pct` (first close to last) are computed in code, so the browser does no arithmetic. Errors: **422** for a symbol we cannot resolve (`^GSPC`, `TCS.NS`) or a range outside the four; **404** `{"error": ...}` when there is no usable data (unknown ticker, fewer than 2 points); **502** `{"error": ...}` when the provider fails (the cause is logged, never returned); **503** when the server has no market provider with history.
 
 ## Design
 

@@ -1,6 +1,6 @@
 # Shared Contracts
 
-**Status:** Planned · **Files (planned):** `src/core/contracts.py`, `src/data/market/`, `src/data/portfolio/` · **Rubric ties:** Multi-Agent Architecture (10%), Code Organization (5%), Testing (5%)
+**Status:** Implemented (`AgentResult`, `AgentContext`, memory contract in section 9) · **Files:** `src/core/contracts.py`, `src/data/market/`, `src/data/portfolio/` · **Rubric ties:** Multi-Agent Architecture (10%), Code Organization (5%), Testing (5%)
 
 ## Purpose & Scope
 

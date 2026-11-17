@@ -61,12 +61,12 @@ Each agent has its own dedicated design doc — purpose/scope, a detailed archit
 
 | Agent | Status | Rubric tie | Doc |
 |---|---|---|---|
-| Finance Q&A | Planned | Educational Content (8%), RAG Implementation (8%) | [`docs/agents/finance_qa_agent.md`](agents/finance_qa_agent.md) |
-| Portfolio Analysis | **Implemented** (core) | Portfolio Analysis (7%) | [`docs/agents/portfolio_agent.md`](agents/portfolio_agent.md) |
-| Market Analysis | Planned | Real-time Data Integration (7%), Market Intelligence (5%) | [`docs/agents/market_analysis_agent.md`](agents/market_analysis_agent.md) |
-| Goal Planning | Planned | Deliverables — goal planning w/ risk appetite | [`docs/agents/goal_planning_agent.md`](agents/goal_planning_agent.md) |
-| News Synthesizer | Planned — "if time permits" | none named — build last among core+1 | [`docs/agents/news_synthesizer_agent.md`](agents/news_synthesizer_agent.md) |
-| Tax Education | Planned — stretch goal | none named — build last | [`docs/agents/tax_education_agent.md`](agents/tax_education_agent.md) |
+| Finance Q&A | **Implemented** | Educational Content (8%), RAG Implementation (8%) | [`docs/agents/finance_qa_agent.md`](agents/finance_qa_agent.md) |
+| Portfolio Analysis | **Implemented** (live Kite and sample) | Portfolio Analysis (7%) | [`docs/agents/portfolio_agent.md`](agents/portfolio_agent.md) |
+| Market Analysis | **Implemented** | Real-time Data Integration (7%), Market Intelligence (5%) | [`docs/agents/market_analysis_agent.md`](agents/market_analysis_agent.md) |
+| Goal Planning | **Implemented** | Deliverables — goal planning w/ risk appetite | [`docs/agents/goal_planning_agent.md`](agents/goal_planning_agent.md) |
+| News Synthesizer | **Implemented** | none named — build last among core+1 | [`docs/agents/news_synthesizer_agent.md`](agents/news_synthesizer_agent.md) |
+| Tax Education | **Implemented** | none named — build last | [`docs/agents/tax_education_agent.md`](agents/tax_education_agent.md) |
 
 **Cross-agent notes worth remembering while building the rest:**
 - Market Analysis can reuse Kite MCP's quote/OHLC/historical tools (same connection style as Portfolio Analysis) before reaching for a second yfinance/Alpha Vantage integration.
@@ -78,7 +78,7 @@ Each agent has its own dedicated design doc — purpose/scope, a detailed archit
 
 ## 4. RAG Implementation Details
 
-*(Planned — design, not yet built.)* Content plan (80-topic backlog, trusted sources, article template, metadata schema, guardrails): [`docs/knowledge-base/content-backlog.md`](knowledge-base/content-backlog.md).
+*(Implemented: `src/rag/`, configured by `src/config/rag.yaml`. The list below is the original design.)* Content plan (80-topic backlog, trusted sources, article template, metadata schema, guardrails): [`docs/knowledge-base/content-backlog.md`](knowledge-base/content-backlog.md).
 
 - **Vector store**: Chroma (already in `pyproject.toml`) — runs embedded, no separate service to operate for a project this size.
 - **Chunking**: recursive character splitting, ~500–800 tokens per chunk with ~10–15% overlap, so a concept explanation isn't severed mid-paragraph.
@@ -91,7 +91,7 @@ Each agent has its own dedicated design doc — purpose/scope, a detailed archit
 ## 5. Performance Considerations
 
 - **One LLM instance per process.** `LLMFactory.get_default()` caches its instance — every agent that doesn't explicitly inject its own LLM shares one client, avoiding redundant provider SDK initialization.
-- **Market data caching.** 30-minute TTL cache in front of any live market data call (Kite MCP or yfinance/Alpha Vantage), with exponential backoff on rate limits — per the spec FAQ's explicit guidance.
+- **Market data caching (design; not built yet, tracked in the backlog).** 30-minute TTL cache in front of any live market data call (Kite MCP or yfinance/Alpha Vantage), with exponential backoff on rate limits — per the spec FAQ's explicit guidance.
 - **MCP connection reuse is not optional — it's required for correctness, not just speed.** Early iterations of the Portfolio Agent called `login()` and the next tool call on what turned out to be two different implicit sessions, which didn't just waste a connection — it silently hung, because Kite's login state is bound to the session that performed it. The fix was holding one `MCPAdapter`/`fastmcp.Client` connection open (via `async with`) across the entire login-and-query lifecycle. Any future connection-holding agent (e.g. Market Analysis, if it also talks to Kite MCP) should follow the same pattern. **Update 2026-11-12:** the hosted server has since moved to OAuth (an unauthenticated client gets `401 no bearer token`) and regrouped its tools (`portfolio`, `session`, `mutual_funds`, … with a `mode` argument, no `login` tool). The held-connection rule still applies, now implemented in `src/data/portfolio/kite.py` (see [`agents/portfolio_agent.md`](agents/portfolio_agent.md)); the old `MCPAdapter` code in `src/agents/portfolio_agent.py` no longer connects.
 - **Never block the event loop while a connection is open.** A plain `input()` call (e.g. "press Enter after you've logged in") freezes the whole event loop, including any open MCP connection's ability to service itself. Use `await asyncio.to_thread(input, ...)` for any blocking wait that happens while a connection-holding agent is active.
 - **Timeouts around agent calls.** Every `agent.run(...)` call in a connection-holding agent should be wrapped in `asyncio.wait_for(..., timeout=...)` so a server-side hang fails loudly and fast instead of hanging the whole process indefinitely.
@@ -101,6 +101,6 @@ Each agent has its own dedicated design doc — purpose/scope, a detailed archit
 
 ## 6. Testing Strategy
 
-- **Today**: the scripts under `tests/` are manual smoke tests — they hit the real Kite MCP server and require a real browser login, run via `python -m tests...`, not `pytest`.
-- **Planned**: an automated suite that mocks `fastmcp.Client` / `MCPAdapter` / `create_agent` so agent logic (tool filtering, response normalization, error handling) is tested without any real network call or login, using `pytest-asyncio` with `asyncio_mode = "auto"` (see `pyproject.toml`). Target: 80%+ coverage per the grading rubric, including edge cases like malformed queries and tool/timeout failures.
+- **Today:** 1,710 automated Python tests (85% line coverage) and 454 web-app tests. No test needs the network or a login: LLMs, providers and the Kite client are replaced by recording fakes. Live checks are separate scripts in `scripts/`. Every change was also mutation-checked (the code deliberately broken to confirm a test notices).
+- **Original plan (now done):** an automated suite that mocks `fastmcp.Client` / `MCPAdapter` / `create_agent` so agent logic (tool filtering, response normalization, error handling) is tested without any real network call or login, using `pytest-asyncio` with `asyncio_mode = "auto"` (see `pyproject.toml`). Target: 80%+ coverage per the grading rubric, including edge cases like malformed queries and tool/timeout failures.
 - Pure-calculation agents (Goal Planning) are the easiest to hit high coverage on — no mocking required, just assert on the math.

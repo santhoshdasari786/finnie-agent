@@ -1,6 +1,6 @@
 # Market Analysis Agent
 
-**Status:** Planned · **File (planned):** `src/agents/market_analysis_agent.py` · **Rubric ties:** Real-time Data Integration (7%), Market Intelligence (5%)
+**Status:** Implemented (yfinance behind a provider registry; the design below is the original brainstorm; see `tests/agents/marketagents/`) · **File:** `src/agents/market_analysis_agent.py` · **Rubric ties:** Real-time Data Integration (7%), Market Intelligence (5%)
 
 ## Purpose & Scope
 
@@ -97,3 +97,7 @@ Exponential backoff on rate-limit responses (`429`), falling through to the next
 - **Symbols**: callers use a canonical `Instrument`; each provider maps it (yfinance suffixes such as `.NS` / `.BO` and its own index symbols; Kite `NSE:SYMBOL`). Verify mappings against live responses, especially indexes (Nifty, Sensex).
 - **yfinance caveats**: unofficial, can rate-limit or change without notice, and is blocking I/O (call via `asyncio.to_thread`). Hence the cache, the fallback chain and a `stale` flag on `Quote`.
 - **Routing**: the router sends price, quote and "how did X do" questions here (for example, "What was the Nifty 50 close yesterday?"); the Q&A agent no longer has to refuse them.
+
+## Addition (2026-11-17): price history
+
+`MarketDataProvider.history(instrument, range)` returns a `PriceHistory` (daily closes, oldest first) or `None`; `range` is `1m`, `3m`, `6m` or `1y`. The yfinance provider asks for adjusted daily bars in a worker thread, drops NaN and non-positive closes, rounds to two decimals, and returns `None` for any failure or an empty table. `src/data/market/history.py` computes the summary (latest, high, low, change over the range) and `symbols.resolve_instrument` turns what a user typed into an `Instrument`. It feeds `GET /market/history` (see `docs/API.md`); the agent exposes its `provider` so the API can reach it. Not cached yet (see Step 3 of the review plan).
