@@ -195,6 +195,15 @@ def test_only_safe_meta_is_exposed():
     assert meta == {"awaiting": "goal_planning", "missing": ["horizon_years"], "retryable": False}
 
 
+def test_collaboration_is_exposed_so_the_ui_can_show_which_agents_worked_together():
+    agents = {n: StubAgent(n) for n in sorted(AGENT_NAMES)}
+    agents["goal_planning"] = StubAgent("goal_planning", meta={
+        "collaboration": {"agents": ["portfolio", "goal_planning"], "starting_balance": 500000.0}, "learned": {"slots": {"a": 1}}})
+    with TestClient(create_app(runtime=make_runtime(agents))) as c:
+        meta = chat(c, "can I retire at 50?").json()["meta"]
+    assert meta == {"collaboration": {"agents": ["portfolio", "goal_planning"], "starting_balance": 500000.0}}
+
+
 def _with(**fields):
     async def run(query, ctx=None):
         return AgentResult(agent="finance_qa", status="ok", text="answer", disclaimer="d", **fields)

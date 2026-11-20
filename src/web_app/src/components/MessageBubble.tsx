@@ -38,9 +38,25 @@ export function MessageBubble({ message, onSend, onRetry }: Props) {
   }
 
   const r = message.response;
+  const team = r.meta?.collaboration?.agents;
+  const worked = Array.isArray(team) && team.length > 1 && team.every((a) => typeof a === "string") ? team : null;
   return (
     <div data-testid="assistant-message" data-status={r.status} className="max-w-[92%]">
-      <div className="mb-1"><AgentBadge agent={r.agent} /></div>
+      <div className="mb-1 flex flex-wrap items-center gap-1">
+        {worked ? (
+          <p data-testid="collaboration" className="flex flex-wrap items-center gap-1 text-xs text-slate-600 dark:text-slate-300">
+            <span>Worked together:</span>
+            {worked.map((a, i) => (
+              <span key={`${a}-${i}`} className="flex items-center gap-1">
+                {i > 0 && <span aria-hidden="true">then</span>}
+                <AgentBadge agent={a} />
+              </span>
+            ))}
+          </p>
+        ) : (
+          <AgentBadge agent={r.agent} />
+        )}
+      </div>
       <div className="break-words rounded-2xl rounded-tl-sm border border-slate-200 bg-white px-4 py-3 shadow-sm dark:border-slate-700 dark:bg-slate-800">
         <RichText text={r.text} />
         <DataPanel data={r.data} />

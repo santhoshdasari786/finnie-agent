@@ -19,6 +19,7 @@ export interface ResponseMeta {
   retryable?: boolean;
   awaiting?: string;
   missing?: string[];
+  collaboration?: { agents: string[]; starting_balance?: number };
 }
 
 export interface ChatRequest {

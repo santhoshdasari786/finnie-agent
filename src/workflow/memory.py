@@ -40,6 +40,7 @@ class ConversationMemory:
         self._slots: dict[tuple[str, str], dict] = {}
         self._last_agent: dict[str, str] = {}      # thread -> the last real agent that answered
         self._awaiting: dict[str, str] = {}      # thread -> the agent whose question is waiting for an answer
+        self._pending_goal: dict[str, str] = {}  # thread -> a goal question waiting for the portfolio to be connected
 
     def history(self, thread_id: str) -> list[Turn]:
         return list(self._turns.get(thread_id, []))
@@ -70,6 +71,12 @@ class ConversationMemory:
         if isinstance(slots, dict):
             self._slots.setdefault(key, {}).update({k: v for k, v in slots.items() if v is not None})
 
+    def set_pending_goal(self, thread_id: str, question: str) -> None:
+        self._pending_goal[thread_id] = question
+
+    def take_pending_goal(self, thread_id: str) -> str | None:
+        return self._pending_goal.pop(thread_id, None)
+
     def last_agent(self, thread_id: str) -> str | None:
         return self._last_agent.get(thread_id)
 
@@ -96,6 +103,7 @@ class ConversationMemory:
     def clear(self, thread_id: str) -> None:
         self._turns.pop(thread_id, None)
         self._awaiting.pop(thread_id, None)
+        self._pending_goal.pop(thread_id, None)
         self._profiles.pop(thread_id, None)
         self._last_agent.pop(thread_id, None)
         for key in [k for k in self._slots if k[0] == thread_id]:

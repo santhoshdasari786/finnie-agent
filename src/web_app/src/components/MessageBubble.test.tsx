@@ -25,6 +25,25 @@ describe("MessageBubble", () => {
     expect(screen.getByText(/not financial advice/i)).toBeInTheDocument();
   });
 
+  it("shows which agents worked together on one answer", () => {
+    const a = assistant({ agent: "goal_planning", meta: { collaboration: { agents: ["portfolio", "goal_planning"], starting_balance: 115170 } } });
+    render(<MessageBubble message={a} onSend={noop} onRetry={noop} />);
+    const note = screen.getByTestId("collaboration");
+    expect(note).toHaveTextContent(/worked together/i);
+    expect(note.textContent).toMatch(/Portfolio.*Goals/);
+  });
+
+  it("shows no collaboration note for an answer from one agent", () => {
+    render(<MessageBubble message={assistant({ agent: "goal_planning" })} onSend={noop} onRetry={noop} />);
+    expect(screen.queryByTestId("collaboration")).toBeNull();
+  });
+
+  it("ignores a collaboration value it does not understand", () => {
+    const a = assistant({ meta: { collaboration: { agents: "portfolio" } as never } });
+    render(<MessageBubble message={a} onSend={noop} onRetry={noop} />);
+    expect(screen.queryByTestId("collaboration")).toBeNull();
+  });
+
   it("shows citations", () => {
     const a = assistant({ citations: [{ source: "https://x.org", title: "Source A", excerpt: "e", verified_at: null }] });
     render(<MessageBubble message={a} onSend={noop} onRetry={noop} />);

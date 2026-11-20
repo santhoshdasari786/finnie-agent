@@ -6,7 +6,7 @@ from src.workflow.state import AgentName
 
 THREAD_ID_PATTERN = r"^[A-Za-z0-9_-]{8,64}$"
 MAX_MESSAGE_CHARS = 2000
-SAFE_META = ("retryable", "awaiting", "missing")
+SAFE_META = ("retryable", "awaiting", "missing", "collaboration")
 
 
 class ChatRequest(BaseModel):

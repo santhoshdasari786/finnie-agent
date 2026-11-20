@@ -8,6 +8,7 @@ from src.workflow.router import route_by_rules
 from src.workflow.state import AGENT_NAMES, INTENT_TO_AGENT, GraphState, RoutingDecision
 from src.workflow.classifier import CLARIFY_REPLY, OFF_TOPIC_REPLY, needs_classifier
 from src.workflow.memory import looks_like_slot_answer
+from src.workflow.compose import goal_after_connect, goal_from_portfolio, wants_portfolio_and_goal
 
 
 log = logging.getLogger(__name__)
@@ -113,7 +114,19 @@ def make_nodes(agents: dict, guardrails, settings: QASettings, memory=None,
                            flags=guard.flags, history=state.get("history") or [],
                            slots=memory.slots(state["thread_id"], name) if memory else {})
         try:
-            return {"result": await agent.run(decision.normalized_question, ctx)}
+            if wants_portfolio_and_goal(decision, agents):
+                return {"result": await goal_from_portfolio(agents, decision.normalized_question, ctx, memory)}
+            if memory is not None and decision.intent != "portfolio":
+                memory.take_pending_goal(state["thread_id"])        # the user moved on: forget the waiting goal question
+            result = await agent.run(decision.normalized_question, ctx)
+            if memory is not None and decision.intent == "portfolio" and result.status == "ok" and (result.data or {}).get("metrics") and agents.get("goal_planning"):
+                waiting = memory.take_pending_goal(state["thread_id"])
+                if waiting:
+                    goal_ctx = ctx.model_copy(update={"slots": memory.slots(state["thread_id"], "goal_planning")})
+                    answered = await goal_after_connect(agents, waiting, goal_ctx, result)
+                    if answered is not None:
+                        return {"result": answered}
+            return {"result": result}
         except Exception:
             log.exception("agent %s failed", name)
             return {"result": _error(name, settings.error_message)}

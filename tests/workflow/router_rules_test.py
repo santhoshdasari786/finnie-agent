@@ -259,3 +259,26 @@ def test_news_questions_in_other_words(text):
 @pytest.mark.parametrize("text", ["What is financial news?", "What is a newsletter?", "How do I read the news section of a factsheet?"])
 def test_these_are_not_news_requests(text):
     assert intent_of(text) != "news"
+
+
+# ================================================================ misspelled "portfolio" (seen live 2026-11-21: "using my portifolio")
+@pytest.mark.parametrize("word", ["portifolio", "portfolo", "porfolio", "portfoilo", "potfolio", "Portifolio", "PORTIFOLIO"])
+def test_a_misspelled_portfolio_is_still_a_portfolio(word):
+    d = route_by_rules(f"Can I reach 50 lakh in 10 years saving 20k a month using my {word}")
+    assert d.intent == "goal" and "portfolio" in d.secondary_intents
+
+
+@pytest.mark.parametrize("word", ["portifolio", "portfolo"])
+def test_a_misspelled_portfolio_alone_routes_to_the_portfolio_agent(word):
+    assert route_by_rules(f"analyze my {word}").intent == "portfolio"
+
+
+def test_the_misspelling_is_corrected_in_the_text_the_agents_see():
+    d = route_by_rules("Can I reach 50 lakh in 10 years using my portifolio")
+    assert "portfolio" in d.normalized_question and "portifolio" not in d.normalized_question
+
+
+@pytest.mark.parametrize("text", ["What is a protocol", "my portrait is nice", "my portion of the rent", "explain my port wine budget"])
+def test_ordinary_words_near_portfolio_are_left_alone(text):
+    d = route_by_rules(text)
+    assert d is None or "portfolio" not in d.secondary_intents and d.intent != "portfolio"

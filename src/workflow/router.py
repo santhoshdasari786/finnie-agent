@@ -5,6 +5,7 @@ Contract: route_by_rules(text) -> RoutingDecision | None
   Rules favour PRECISION over recall: a rule that wrongly fires sends the user to the wrong agent with
   high confidence, while a rule that misses only defers to the next tier.
 """
+import difflib
 import re
 
 from src.workflow.state import Intent, RoutingDecision
@@ -77,8 +78,23 @@ def _symbols(text: str) -> list[str]:
     return list(dict.fromkeys(found))              # de-duplicate, keep first-seen order
 
 
+_WORD = re.compile(r"[A-Za-z]{7,12}")
+_PORTFOLIO_SIMILARITY = 0.85          # "portifolio", "portfolo", "porfolio" pass; "portion" (0.75) and "portrait" do not
+
+
+def _fix_portfolio_typos(text: str) -> str:
+    """People misspell "portfolio" and the rules then miss it ("using my portifolio" ran as a plain goal question).
+    Only a word that is very close to it is changed, and only to that one word, so nothing else is rewritten."""
+    def fix(m: re.Match) -> str:
+        w = m.group(0)
+        close = w.lower() != "portfolio" and not w.lower().startswith("portfolios") and \
+            difflib.SequenceMatcher(None, w.lower(), "portfolio").ratio() >= _PORTFOLIO_SIMILARITY
+        return "portfolio" if close else w
+    return _WORD.sub(fix, text)
+
+
 def route_by_rules(text: str | None) -> RoutingDecision | None:
-    normalized = " ".join((text or "").split())     # collapse spaces and newlines
+    normalized = _fix_portfolio_typos(" ".join((text or "").split()))     # collapse spaces and newlines
     if not normalized.strip("?!. "):
         return None                                 # empty or punctuation only: no opinion
 
