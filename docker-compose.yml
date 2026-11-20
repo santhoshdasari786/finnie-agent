@@ -1,0 +1,42 @@
+# Finnie in containers.
+#   1. cp .env.example .env   (or create .env with GOOGLE_API_KEY=...)
+#   2. docker compose up --build            -> API on :8000, web app on :8080
+#   3. docker compose run --rm ingest       -> builds the knowledge-base index (about 500 embedding calls on first run)
+# Ports: set API_PORT / WEB_PORT in the shell or .env if 8000 / 8080 are taken.
+# Glossary questions, goals, prices and portfolio work without step 3; knowledge-base answers need it.
+services:
+  api:
+    build: .
+    ports: ["${API_PORT:-8000}:8000"]
+    env_file:
+      - path: .env
+        required: false
+    environment:
+      FINNIE_CORS_ORIGINS: http://localhost:${WEB_PORT:-8080},http://127.0.0.1:${WEB_PORT:-8080}
+    volumes:
+      - vectorstore:/app/.vectorstore
+    restart: unless-stopped
+
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile.web
+      args:
+        VITE_API_URL: http://localhost:${API_PORT:-8000}
+    ports: ["${WEB_PORT:-8080}:80"]
+    depends_on:
+      api:
+        condition: service_healthy
+
+  ingest:                       # run on demand, not started by "up"
+    build: .
+    profiles: ["tools"]
+    command: ["python", "-m", "src.rag.ingestion.cli", "--config", "src/config/rag.yaml"]
+    env_file:
+      - path: .env
+        required: false
+    volumes:
+      - vectorstore:/app/.vectorstore
+
+volumes:
+  vectorstore:

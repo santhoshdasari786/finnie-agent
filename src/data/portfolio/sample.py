@@ -13,6 +13,9 @@ _SAMPLE = [
     ("GOLDBEES", 200, 55.0, "gold"),
 ]
 
+# Illustrative yearly fund costs in percent for the demo funds. NOT the real figures: they only show how the screen works.
+_DEMO_EXPENSE_RATIOS = {"NIFTYBEES": 0.05, "LIQUIDBEES": 0.65, "GOLDBEES": 0.80}
+
 @register_source("sample")
 class SampleSource:
     name = "sample"
@@ -25,5 +28,6 @@ class SampleSource:
         return ConnectInfo(connected=True, message="Connected the sample portfolio (demo data, not yours).")
 
     async def holdings(self) -> list[Holding]:
-        return [Holding(instrument=Instrument(symbol=s), quantity=q, avg_price=p, asset_class=c)
+        return [Holding(instrument=Instrument(symbol=s), quantity=q, avg_price=p, asset_class=c,
+                        expense_ratio_pct=_DEMO_EXPENSE_RATIOS.get(s))
                 for s, q, p, c in _SAMPLE]

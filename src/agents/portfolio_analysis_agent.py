@@ -187,7 +187,8 @@ class PortfolioAnalysisAgent:
                  f"source: {', '.join(connected)}{demo}", prices]
         for h in m.holdings:
             pnl = f"  ({h.pnl_pct:+.2f}%)" if h.pnl_pct is not None else ""
-            lines.append(f"- {h.symbol:<12}{h.allocation_pct:>6.2f}%  {_inr(h.value)}{pnl}")
+            fee = f"  fee {h.expense_ratio_pct:.2f}%" if h.expense_ratio_pct is not None else ""
+            lines.append(f"- {h.symbol:<12}{h.allocation_pct:>6.2f}%  {_inr(h.value)}{pnl}{fee}")
         lines.append("Allocation by class: " + " · ".join(
             f"{k.replace('_', ' ')} {v:.1f}%" for k, v in sorted(m.by_asset_class.items(), key=lambda kv: -kv[1])))
         lines.append(f"Diversification score: {m.diversification_score:.2f} (0 = a single holding, 1 = very spread out)"
@@ -195,6 +196,12 @@ class PortfolioAnalysisAgent:
         stated = ctx.profile.risk_appetite if ctx else None
         if stated and stated != m.risk_assessment:
             lines.append(f"Your stated risk appetite is {stated}; this portfolio looks {m.risk_assessment}.")
+        if m.annual_fund_cost is not None:
+            note = " (illustrative ratios on the demo portfolio)" if "sample" in connected else ""
+            lines.append(f"Fund costs: {m.weighted_expense_ratio_pct:.2f}% a year on average, {_inr(m.annual_fund_cost)} a year, "
+                         f"for the {m.expense_covered_pct:.1f}% of the portfolio where the ratio is known{note}")
+        if m.expense_unknown:
+            lines.append(f"Expense ratio not known for: {', '.join(m.expense_unknown)}")
         if m.unpriced:
             lines.append(f"I couldn't price: {', '.join(m.unpriced)} (left out of the totals).")
         if m.unclassified:

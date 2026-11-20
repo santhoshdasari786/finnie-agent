@@ -1,0 +1,5 @@
+# Used instead of .dockerignore when building Dockerfile.web: only the React app is needed.
+*
+!src/web_app/
+src/web_app/node_modules/
+src/web_app/dist/

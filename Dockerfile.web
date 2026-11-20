@@ -1,0 +1,15 @@
+# syntax=docker/dockerfile:1
+# The React app: built once, then served as static files by nginx.
+FROM node:22-alpine AS build
+WORKDIR /web
+COPY src/web_app/package.json src/web_app/package-lock.json ./
+RUN npm ci
+COPY src/web_app/ ./
+# The browser calls the API directly, so this must be an address the BROWSER can reach (not a container name).
+ARG VITE_API_URL=http://localhost:8000
+ENV VITE_API_URL=$VITE_API_URL
+RUN npm run build
+
+FROM nginx:1.27-alpine
+COPY --from=build /web/dist /usr/share/nginx/html
+EXPOSE 80

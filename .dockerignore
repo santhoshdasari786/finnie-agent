@@ -2,14 +2,21 @@
 __pycache__/
 *.pyc
 .pytest_cache/
+.coverage
 .env
 .envrc
 .git/
+.vectorstore/
 tests/
-docs/
 README.md
 *.log
+notes.txt
+Readme.chroma.md
 
-# React app — separate frontend, not part of this Python image
+# Only the knowledge base is needed at run time (glossary and the articles to index); the other docs are not.
+docs/*
+!docs/knowledge-base/
+
+# React app is built by Dockerfile.web, not part of the Python image
 src/web_app/
 node_modules/

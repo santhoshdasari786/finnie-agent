@@ -32,6 +32,7 @@ function read(data: Record<string, unknown> | null) {
     count: Array.isArray(metrics.holdings) ? metrics.holdings.length : null,
     diversification: isNum(metrics.diversification_score) ? metrics.diversification_score : null,
     top: isNum(metrics.top_holding_pct) ? metrics.top_holding_pct : null,
+    fee: isNum(metrics.weighted_expense_ratio_pct) ? metrics.weighted_expense_ratio_pct : null,
     risk: typeof metrics.risk_assessment === "string" ? metrics.risk_assessment : null,
   };
 }
@@ -52,6 +53,7 @@ export function PortfolioView({ messages, pending, onSend }: Props) {
     ["Diversification", view.diversification === null ? null : `${view.diversification.toFixed(2)} / 1`],
     ["Risk profile", view.risk ? view.risk.charAt(0).toUpperCase() + view.risk.slice(1) : null],
     ["Largest holding", view.top === null ? null : `${view.top.toFixed(1)}%`],
+    ["Fund costs", view.fee === null ? null : `${view.fee.toFixed(2)}% a year`],
     ["Holdings", view.count === null ? null : String(view.count)],
   ].filter((t): t is [string, string] => t[1] !== null);
 

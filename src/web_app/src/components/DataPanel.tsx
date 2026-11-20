@@ -92,6 +92,7 @@ interface Holding {
   value: number;
   allocation_pct: number;
   pnl_pct: number | null;
+  fee: number | null;
 }
 
 function parseHoldings(x: unknown): Holding[] | null {
@@ -99,7 +100,7 @@ function parseHoldings(x: unknown): Holding[] | null {
   const out: Holding[] = [];
   for (const h of x) {
     if (!isRecord(h) || typeof h.symbol !== "string" || !isNum(h.value) || !isNum(h.allocation_pct)) return null;
-    out.push({ symbol: h.symbol, value: h.value, allocation_pct: h.allocation_pct, pnl_pct: orNull(h.pnl_pct) });
+    out.push({ symbol: h.symbol, value: h.value, allocation_pct: h.allocation_pct, pnl_pct: orNull(h.pnl_pct), fee: orNull(h.expense_ratio_pct) });
   }
   return out;
 }
@@ -118,6 +119,11 @@ function Portfolio({ metrics, sources }: { metrics: Record<string, unknown>; sou
     : [];
   const unpriced = Array.isArray(metrics.unpriced) ? metrics.unpriced.filter((u) => typeof u === "string") : [];
   const demo = Array.isArray(sources) && sources.includes("sample");
+  const showFee = holdings.some((h) => h.fee !== null);
+  const feeNotKnown = Array.isArray(metrics.expense_unknown) ? metrics.expense_unknown.filter((u) => typeof u === "string") : [];
+  const costs = isNum(metrics.weighted_expense_ratio_pct) && isNum(metrics.annual_fund_cost) && isNum(metrics.expense_covered_pct)
+    ? { ratio: metrics.weighted_expense_ratio_pct, yearly: metrics.annual_fund_cost, covered: metrics.expense_covered_pct }
+    : null;
   return (
     <section aria-label="Portfolio details" className={card}>
       <p className="mb-2 flex items-baseline justify-between gap-2">
@@ -132,6 +138,7 @@ function Portfolio({ metrics, sources }: { metrics: Record<string, unknown>; sou
             <th className={th} scope="col">Value</th>
             <th className={th} scope="col">Share</th>
             <th className={th} scope="col">P&amp;L</th>
+            {showFee && <th className={th} scope="col">Fee</th>}
           </tr>
         </thead>
         <tbody>
@@ -141,6 +148,7 @@ function Portfolio({ metrics, sources }: { metrics: Record<string, unknown>; sou
               <td className={td}>{inr(h.value)}</td>
               <td className={td}>{h.allocation_pct.toFixed(1)}%</td>
               <td className={td}><Change value={h.pnl_pct} digits={1} /></td>
+              {showFee && <td className={td}>{h.fee === null ? dash : `${h.fee.toFixed(2)}%`}</td>}
             </tr>
           ))}
         </tbody>
@@ -156,6 +164,13 @@ function Portfolio({ metrics, sources }: { metrics: Record<string, unknown>; sou
         {isNum(metrics.diversification_score) && <>Diversification {metrics.diversification_score.toFixed(2)} / 1 · </>}
         {typeof metrics.risk_assessment === "string" && <>risk profile {metrics.risk_assessment}</>}
       </p>
+      {costs && (
+        <p className="mt-1 text-slate-600 dark:text-slate-300">
+          Fund costs: {costs.ratio.toFixed(2)}% a year on average ({inr(costs.yearly)} a year) for the {costs.covered.toFixed(1)}% of the portfolio where the ratio is known.
+          {demo && <span className="text-xs text-slate-500"> Ratios on the demo portfolio are illustrative.</span>}
+        </p>
+      )}
+      {feeNotKnown.length > 0 && <p className="mt-1 text-xs text-amber-700 dark:text-amber-300">Expense ratio not known for: {feeNotKnown.join(", ")}</p>}
       {unpriced.length > 0 && <p className="mt-1 text-xs text-amber-700 dark:text-amber-300">Couldn't price: {unpriced.join(", ")}</p>}
     </section>
   );
