@@ -28,7 +28,7 @@ Run it: `.venv/bin/python -m uvicorn src.main:app --reload --port 8000`, then op
 - **`thread_id`** is chosen by the server when missing and is always returned. The client keeps it for the whole conversation (a browser keeps one per tab). It must match `^[A-Za-z0-9_-]{8,64}$`.
 - **`status`** is one of `ok`, `no_source`, `clarify`, `redirect`, `needs_login`, `error`. A blocked or failed message is still **HTTP 200**; only a malformed *request* is **422** (blank or over-2000-character message, bad `thread_id`, unknown `agent`).
 - **`login_url`** is set only when `status` is `needs_login` (the Kite login link). The UI shows it as a button.
-- **`meta`** exposes only `retryable`, `awaiting` and `missing`. The internal `learned` and `summary` never leave the server.
+- **`meta`** exposes only `retryable`, `awaiting`, `missing` and `collaboration` (`{agents: [...], starting_balance}`, present when two agents answered one question). The internal `learned` and `summary` never leave the server.
 - An unexpected crash is **HTTP 500** `{"error": "Something went wrong on the server. Please try again."}`, with no stack trace. The cause is logged.
 
 ### `GET /market/history`

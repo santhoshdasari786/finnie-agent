@@ -9,6 +9,14 @@ A multi-agent personal-finance **education** assistant for Indian investors, bui
 
 ---
 
+## 🎬 Demo video
+
+> **Watch the demo:** [`demo-video/primary-demo.mp4`](demo-video/primary-demo.mp4), the app running end to end (multi-turn chat, market data, portfolio analysis, goal planning, two agents on one question).
+> **README and design walkthrough:** [`demo-video/readme.mp4`](demo-video/readme.mp4), the architecture, setup, ways to use it and the technical design.
+> The order and questions used are in [`docs/DEMO_WALKTHROUGH.md`](docs/DEMO_WALKTHROUGH.md).
+
+---
+
 ## Contents
 
 1. [What it does](#what-it-does)
@@ -51,7 +59,7 @@ All six agents, the knowledge base, the guardrails, memory, the HTTP API, the Re
 | Piece | Status |
 |---|---|
 | Finance Q&A, Tax Education, Market Analysis, Portfolio Analysis, Goal Planning, News Synthesizer | Done |
-| RAG knowledge base (Chroma, Gemini embeddings, glossary, citations) | Done: **51 articles** in 7 topics and a **93-term glossary**, linted by tests, retrieval checked against 102 questions (see [content plan](docs/knowledge-base/content-backlog.md)) |
+| RAG knowledge base (Chroma, Gemini embeddings, glossary, citations) | Done: **100 articles** in 7 topics and a **93-term glossary**, linted by tests, retrieval checked against 200 questions (live eval passed 2026-11-18; articles still have no qualified human review) (see [content plan](docs/knowledge-base/content-backlog.md)) |
 | LangGraph workflow: guards, follow-up rewriting, router, memory | Done |
 | HTTP API (`/chat`, `/agents`, `/sessions`, `/health`) | Done |
 | React web app | Done (Chat, Portfolio, Market and Goals tabs; hand-written SVG charts) |
@@ -101,7 +109,7 @@ Full design: [`docs/PROJECT_RECAP.md`](docs/PROJECT_RECAP.md) (end-to-end recap)
 | **Tax Education** | Q&A restricted to the tax topic, concepts not numbers, stronger disclaimer | [doc](docs/agents/tax_education_agent.md) |
 | **Market Analysis** | yfinance quotes behind a provider registry, with `as_of` and `source`; understands Nifty 50 and Sensex by name | [doc](docs/agents/market_analysis_agent.md) |
 | **Portfolio Analysis** | sample portfolio or live Zerodha through Kite MCP (read-only by `(tool, mode)` allowlist); metrics in pure Python | [doc](docs/agents/portfolio_agent.md) |
-| **Goal Planning** | the LLM turns words into numbers; `goal_math` projects, solves for the monthly amount, or the years needed | [doc](docs/agents/goal_planning_agent.md) |
+| **Goal Planning** | the LLM turns words into numbers; `goal_math` projects, solves for the monthly amount, or the years needed; with "my portfolio" in the question it starts from the portfolio agent's total value (two agents, one answer) | [doc](docs/agents/goal_planning_agent.md) |
 | **News Synthesizer** | Google News RSS, noise and relevance filters, near-duplicate clustering, a vetted cited story | [doc](docs/agents/news_synthesizer_agent.md) |
 
 ## Quick start
@@ -255,13 +263,14 @@ No test needs the network or a login: LLMs, data providers and the Kite client a
 
 ## Docker
 
+Two images (the API and the React app behind nginx) and a volume for the knowledge-base index. Tested with Docker 28 and `docker-compose`.
+
 ```bash
-docker build -t ai-finance-assistant .
-docker run --rm -p 8000:8000 --env-file .env ai-finance-assistant
-curl http://localhost:8000/health
+docker compose up --build              # API on :8000, web app on :8080 (needs .env with GOOGLE_API_KEY)
+docker compose run --rm ingest         # builds the index into the volume, about 500 embedding calls the first time
 ```
 
-The image runs the API. It does not contain the React app, which is a separate npm project.
+Without the second command the app starts and everything except knowledge-base answers works (glossary, goals, prices, portfolio). If 8000 or 8080 are taken, set `API_PORT` / `WEB_PORT`. The browser talks to the API directly, so `VITE_API_URL` is baked into the web image from `API_PORT` at build time.
 
 ## Project structure
 
@@ -283,7 +292,7 @@ ai_finance_assistant/
 ├── scripts/           live checks and tools
 ├── docs/              design docs, agent docs, API, knowledge base
 ├── config.yaml        LLM provider and model
-├── pyproject.toml, uv.lock, requirements.txt, Dockerfile
+├── pyproject.toml, uv.lock, requirements.txt, Dockerfile, Dockerfile.web, docker-compose.yml
 └── LICENSE
 ```
 
@@ -335,7 +344,9 @@ The full list, with ids, is in [`docs/qa-agent-backlog.md`](docs/qa-agent-backlo
 | Document | What it covers |
 |---|---|
 | [`docs/PROJECT_RECAP.md`](docs/PROJECT_RECAP.md) | the whole system, end to end |
-| [`docs/TECHNICAL_DESIGN.md`](docs/TECHNICAL_DESIGN.md) | architecture decisions, agent protocol, RAG, performance, testing |
+| [`docs/TECHNICAL_DESIGN.md`](docs/TECHNICAL_DESIGN.md) | architecture decisions, agent protocol, RAG, performance, testing, deployment artifacts |
+| [`docs/BENCHMARKS.md`](docs/BENCHMARKS.md) | measured latency per stage and per question type |
+| [`docs/DEMO_WALKTHROUGH.md`](docs/DEMO_WALKTHROUGH.md) | the order to present the project in, with the questions to ask |
 | [`docs/API.md`](docs/API.md) | HTTP API reference |
 | [`docs/WEB_APP.md`](docs/WEB_APP.md) | the React app |
 | [`docs/agents/`](docs/agents/) | one design doc per agent, the router, shared contracts, the MCP server |
@@ -353,3 +364,11 @@ Licensed under the **[PolyForm Noncommercial License 1.0.0](LICENSE)**. In plain
 - **Commercial licence:** contact santhoshdasari786@gmail.com.
 
 This is educational software and does not provide financial advice.
+
+---
+
+## 🎬 Demo video
+
+> **Watch the demo:** [`demo-video/primary-demo.mp4`](demo-video/primary-demo.mp4), the app running end to end.
+> **README and design walkthrough:** [`demo-video/readme.mp4`](demo-video/readme.mp4).
+> Steps and questions: [`docs/DEMO_WALKTHROUGH.md`](docs/DEMO_WALKTHROUGH.md).

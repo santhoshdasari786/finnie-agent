@@ -261,6 +261,7 @@ New implementation items from these docs:
 | M4 | `get_price_history` | the provider now has `history()` (2026-11-17, used by `GET /market/history`); exposing it as an MCP tool is the remaining step | P3 | open |
 | M5 | `search_knowledge_base` | raw passages; expose only with the input guard and a clear "source text, not advice" label | P3 | open |
 | M6 | HTTP transport for MCP | needs a per-client conversation id (the stdio default of one conversation per process would mix clients) | P3 | open |
+| M9 | Other misspellings and phrasings of "my portfolio" ("my holdins", "my investments", "what I own"), and a cheap check that a goal question with no stated starting balance asks whether to use a connected portfolio | the first live use on 2026-11-21 missed "using my portifolio"; only that one word is fixed (`_fix_portfolio_typos` in `src/workflow/router.py`, tested) | P2 | open |
 | M8 | Negative cache for unknown tickers | a mistyped ticker asks Yahoo every time (0.6 to 1.2 s); remember "not found" for about a minute. Persisting the cache across restarts is a separate, optional step | P3 | open |
 | M7 | Try it in Claude Desktop | manual: a concept question, a quote, a goal, the portfolio; screenshot for the demo | P2 | open |
 
@@ -294,7 +295,7 @@ Everything below was **built and tested offline, but not confirmed against the r
 
 ### B. Needs a person, a browser or another tool
 
-- [ ] **B1. Docker never built.** `.dockerignore` excludes `docs/`, so the image would not contain the glossary or articles, and the vector index is git-ignored, so a clean build has no index. The Q&A would fail to start. Decide: build the index inside the image (needs embedding quota at build time) or mount `.vectorstore/` and `docs/knowledge-base/glossary.yaml` as a volume; then `docker build` and `docker run` and call `/chat`. Also decide whether the React app belongs in a second image.
+- [~] **B1. Docker.** Done and checked on 2026-11-18: both images build, `docker-compose up` gives a healthy API and web app, `/chat` (glossary, goal), `/market/history` and CORS work from the containers, and the API now starts with an empty index. Still to do (deferred by the user 2026-11-18, to come back to): `docker-compose --profile tools run --rm ingest` into the empty `vectorstore` volume (re-embeds all 934 chunks; cheap on the paid tier) and a knowledge-base question through the web UI in the container. Then confirm the volume survives `down` and `up`.
 - [ ] **B2. Claude Desktop** (M7). The MCP server was verified over stdio only; open Claude Desktop with the config in `docs/agents/mcp_server.md` and try the five prompts there.
 - [ ] **B3. Human review of the 36 new articles** (KB3), starting with the tax, pension, DICGC, regulator and credit-rating articles.
 - [ ] **B4. Open, in a browser, the sources that blocked automated reading** (KB4): Income Tax Department (dividend TDS, penalties, anti-avoidance), RBI Retail Direct, NSI (PPF), EPFO FAQ, the newer PFRDA exit rule, SEBI gold-exchange FAQ, SMART ODR, IRDAI Bima Bharosa. Each article marks which of its claims rest on these.
@@ -310,6 +311,21 @@ Everything below was **built and tested offline, but not confirmed against the r
 - "Which stock will double in the next month?" scores 0.652 against a 0.66 threshold, a margin of 0.008. It passes today; a small change to the knowledge base could flip it (KB6).
 - The embedding-quota message tells the user to try again in a few minutes even when the daily quota is gone (it will not recover for hours). Distinguish the two in the message.
 - Scratch files `notes.txt` and `Readme.chroma.md` are tracked in git; decide whether to keep them.
+
+## 16. Agents working together (added 2026-11-20)
+
+Today each question goes to one agent. The router reports secondary intents but only one pair is acted on: **goal + portfolio** (DONE 2026-11-20, `src/workflow/compose.py`, `tests/workflow/portfolio_goal_test.py`). "Can I reach 1 crore in 10 years with my portfolio?" runs the portfolio agent first, then the goal agent with the portfolio's value as the starting balance. Verified live on the sample portfolio. Limits: a hard-wired pair, not a general mechanism; if the portfolio is not connected the user sees the connect menu and the goal question is answered after they connect; every follow-up turn that still says "my portfolio" re-runs the portfolio agent; the whole portfolio value is used as the starting balance without asking whether it is earmarked for this goal.
+
+| # | Item | Why | Priority | Status |
+|---|---|---|---|---|
+| M1 | **General multi-agent fan-out (the user's option 3).** A planner step after routing turns a question into an ordered or parallel set of agent calls (for example "how is my portfolio doing and what is the news on my biggest holding?": portfolio, then news on the top symbol, then one merged answer), with a shared scratch state, a per-step timeout and an answer composer | the rubric weights multi-agent orchestration at 40%; today it is router-to-one-agent plus one hand-wired pair | P1 | open |
+| M2 | A declared dependency table instead of `if` statements: which agent can feed which (portfolio value to goal starting balance, top holding to market and news, risk appetite to goal and portfolio), so M1 can be built on it and goal+portfolio becomes one row | keeps composition testable and the allowed hand-offs reviewable | P1 | open |
+| M3 | Grounding across agents: a merged answer's numbers must each appear in one agent's code-computed facts; the composer must not add numbers of its own (extend `is_grounded` to take several fact blocks) | the "LLM never calculates" rule has to survive composition | P1 | open |
+| M4 | Failure policy for partial results: when one step fails or times out, say which part is missing and answer the rest; never fill a gap | one flaky agent (Kite login, news feed) must not sink the whole reply | P1 | open |
+| M5 | Latency and cost budget: steps that do not depend on each other run in parallel; measure the composed question in `scripts/bench_latency.py` (goal+portfolio first) | composed questions make 3 to 5 model calls; today's simple question takes about 2 s | P2 | open |
+| M6 | Show the hand-off in the UI: a "Worked together: Portfolio then Goals" line replaces the single agent badge on a composed reply | makes the architecture visible in the demo video | P2 | DONE 2026-11-20 (`meta.collaboration` is now in the API's safe meta; `MessageBubble`; tests in `MessageBubble.test.tsx` and `tests/api/chat_api_test.py`) |
+| M7 | Goal+portfolio refinements: (DONE 2026-11-20: the goal question is remembered across the connect step and answered once the portfolio connects, including the Kite login round trip; forgotten if the user moves to another topic or starts a new chat; verified live with the sample portfolio) still open: ask whether to use the whole portfolio or only part of it; cache the portfolio result for the turn instead of re-running it on every follow-up | listed limits of the first version | P2 | open |
+| M8 | Other pairs worth trying before the general version: portfolio + news (top holding), tax + portfolio ("tax if I sell my holdings", concepts only), market + goal ("if the Nifty falls 20%, what happens to my plan" as a labelled scenario) | each is a small, testable case that exercises M2 and M3 | P3 | open |
 
 ## Suggested order
 

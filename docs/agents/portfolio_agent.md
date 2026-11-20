@@ -100,6 +100,7 @@ Everything else is refused before the client is touched: `orders` (place / modif
 | value | `quantity × price`; allocation = value / total × 100 |
 | diversification | `1 − Σ(weight²)` (one holding = 0, two equal = 0.5, four equal = 0.75) |
 | risk bucket | share held in equity-like assets: ≥ 70 % aggressive, ≥ 40 % moderate, otherwise conservative; one holding ≥ 50 % bumps it up one level (capped at aggressive) |
+| fund costs | `Σ(value × expense ratio / 100)` over the funds whose ratio is known; weighted ratio = that cost / their value; coverage = their share of the portfolio; funds with no known ratio are named, never guessed. The demo portfolio's ratios are illustrative, and a broker that reports none (Kite) shows "not known" |
 | unpriced | holdings with no price are left out of the totals and named in the answer, never guessed |
 | unclassified | holdings without an asset class are treated as higher risk and named |
 

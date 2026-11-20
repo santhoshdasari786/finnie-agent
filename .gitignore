@@ -12,3 +12,8 @@ src/web_app/dist/
 .vectorstore/
 .coverage
 htmlcov/
+
+# Full-size screen recordings (too big for GitHub); the compressed .mp4 files are committed
+demo-video/*.mov
+.DS_Store
+*.tsbuildinfo

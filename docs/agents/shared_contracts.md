@@ -89,6 +89,8 @@ class Agent(Protocol):
 | **Composite agent** | Goal Planning, a future Portfolio Review | leaf agents, **directly** via `run(query, ctx)` |
 | **Entry point** | CLI, FastAPI, MCP, React UI | the **router** (`graph.ainvoke`), see [`router_agent.md`](router_agent.md) |
 
+**Built 2026-11-20:** the one composition that exists, goal + portfolio, is made by the workflow (`src/workflow/compose.py`), not by the goal agent calling the portfolio agent, so the goal agent stays a leaf and the rules below are followed by the orchestrator. The general version is backlog section 16.
+
 Rules for a composite agent calling a leaf agent:
 
 1. Call only `run(query, ctx)` and read only `AgentResult.data`. Never parse `text`, never import the callee's internals.
