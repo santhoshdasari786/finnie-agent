@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import logging
 import os
 from pathlib import Path
 import re
@@ -16,6 +17,8 @@ from src.rag.glossary import yaml_glossary
 from src.common.models import QASettings                          # NEW: for the Rag dataclass
 from src.rag.common.factory import build                   # noqa: F401
 
+
+log = logging.getLogger(__name__)
 
 PROJECT_ROOT = Path(__file__).resolve().parents[2]
 CONFIG_PATH = PROJECT_ROOT / "src" / "config" / "rag.yaml"
@@ -46,8 +49,9 @@ def build_rag(config_path: Path = CONFIG_PATH) -> Rag:
 
     store.ensure_collection()
 
-    if store.info().count == 0:
-        raise RuntimeError(f"Vector collection '{store.name}' is empty. ...")
+    if store.info().count == 0:       # not fatal: glossary, goals, prices and portfolio work; only knowledge-base answers need the index
+        log.warning("Vector collection '%s' is empty, so knowledge-base answers will say there is no source. "
+                    "Build it with: python -m src.rag.ingestion.cli --config src/config/rag.yaml", store.name)
 
     # retriever + post-processors (copy before pop)
     rcfg = dict(cfg["retrieval"])

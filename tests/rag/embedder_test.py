@@ -200,3 +200,37 @@ def test_documents_get_the_same_retry_treatment(build):
 
 def test_the_unavailable_error_is_a_plain_exception():
     assert issubclass(EmbeddingUnavailable, Exception)
+
+
+# ================================================================ per-minute throttle
+def test_a_batch_that_would_overrun_the_minute_waits_instead_of_being_refused(build):
+    now = [0.0]
+    emb, models, sleeps = build(requests_per_minute=100, clock=lambda: now[0])
+    emb._sleep = lambda s: (sleeps.append(s), now.__setitem__(0, now[0] + s))
+    emb.embed_documents(["t"] * 64)                     # uses 64 of the 100 in this minute
+    emb.embed_documents(["t"] * 64)                     # 128 > 100: must wait for the first to age out
+    assert len(models.calls) == 2 and len(sleeps) == 1 and 59 <= sleeps[0] <= 60
+
+
+def test_calls_that_fit_in_the_minute_do_not_wait(build):
+    now = [0.0]
+    emb, models, sleeps = build(requests_per_minute=100, clock=lambda: now[0])
+    emb.embed_documents(["t"] * 40)
+    emb.embed_documents(["t"] * 40)
+    assert sleeps == [] and len(models.calls) == 2
+
+
+def test_the_window_forgets_calls_older_than_a_minute(build):
+    now = [0.0]
+    emb, _, sleeps = build(requests_per_minute=100, clock=lambda: now[0])
+    emb.embed_documents(["t"] * 90)
+    now[0] = 61.0
+    emb.embed_documents(["t"] * 90)
+    assert sleeps == []
+
+
+def test_default_backoff_outlasts_a_one_minute_window(build):
+    emb, models, sleeps = build([errors.ClientError(429, PER_MINUTE)])
+    with pytest.raises(EmbeddingUnavailable):
+        emb.embed_query("q")
+    assert sum(sleeps) >= 60

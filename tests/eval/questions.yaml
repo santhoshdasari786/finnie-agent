@@ -64,7 +64,7 @@ in_kb:
   - { q: "How can an individual buy government securities in India?", expect: government-securities }
   - { q: "How does a recurring deposit differ from a fixed deposit?", expect: fixed-and-recurring-deposits }
   - { q: "What happens if I break a fixed deposit before it matures?", expect: fixed-and-recurring-deposits }
-  - { q: "What are the main categories of mutual funds?", expect: equity-debt-hybrid-funds }
+  - { q: "What are the main categories of mutual funds?", expect: mutual-fund-scheme-categories }
   - { q: "What does a hybrid mutual fund invest in?", expect: equity-debt-hybrid-funds }
   - { q: "What is the difference between an index fund and an actively managed fund?", expect: index-vs-active-funds }
   - { q: "Do actively managed funds always beat index funds?", expect: index-vs-active-funds }
@@ -110,6 +110,112 @@ in_kb:
   - { q: "Show me a worked example of monthly investing over 10 and 20 years.", expect: monthly-investing-worked-example }
   - { q: "Show me with numbers how a bond's price changes when interest rates rise.", expect: bond-price-change-worked-example }
   - { q: "Why does a longer bond lose more value than a shorter one when rates go up?", expect: bond-price-change-worked-example }
+  # batch 1 (2026-11-18), not yet run against the real index
+  - { q: "How is market capitalization calculated?", expect: market-capitalization-and-company-size }
+  - { q: "How does SEBI define large cap, mid cap and small cap companies?", expect: market-capitalization-and-company-size }
+  - { q: "What is the bid-ask spread?", expect: bid-ask-spreads-and-slippage }
+  - { q: "What is slippage when I place a market order?", expect: bid-ask-spreads-and-slippage }
+  - { q: "Who can be a nominee in my demat account or mutual fund folio?", expect: nomination-and-joint-holding }
+  - { q: "Does a nominee become the legal owner of the investments?", expect: nomination-and-joint-holding }
+  - { q: "What are the six levels of the mutual fund riskometer?", expect: scheme-documents-and-riskometer }
+  - { q: "What is the difference between a SID, a KIM and an SAI?", expect: scheme-documents-and-riskometer }
+  - { q: "Is a lump sum better than investing every month?", expect: lump-sum-vs-periodic-investing }
+  - { q: "What is rupee-cost averaging and does it guarantee a lower cost?", expect: lump-sum-vs-periodic-investing }
+  # batch 2 (2026-11-18), not yet run against the real index
+  - { q: "Can I trust investment tips from social media influencers?", expect: financial-influencers-and-misinformation }
+  - { q: "What is a finfluencer and do they need to be SEBI registered?", expect: financial-influencers-and-misinformation }
+  - { q: "What are the three pillars of an investment: safety, liquidity and return?", expect: liquidity-safety-and-return }
+  - { q: "What is liquidity risk?", expect: liquidity-safety-and-return }
+  - { q: "What is an investing time horizon?", expect: time-horizon-and-investing-goals }
+  - { q: "If I hold stocks for a long time, do they become safe?", expect: time-horizon-and-investing-goals }
+  - { q: "How much does a 1 percent yearly fee cost me over 20 years?", expect: fees-over-time-worked-example }
+  - { q: "Show me with numbers how fees reduce long-term returns.", expect: fees-over-time-worked-example }
+  - { q: "What will 1 lakh rupees be worth in 20 years at 5 percent inflation?", expect: inflation-and-purchasing-power-worked-example }
+  - { q: "How do I convert a nominal return into a real return with an example?", expect: nominal-vs-real-returns }
+  # batch 3 (2026-11-18), not yet run against the real index
+  - { q: "What is a demat account and how is it different from a trading account?", expect: demat-accounts-and-depositories }
+  - { q: "What is the difference between NSDL, CDSL and a depository participant?", expect: demat-accounts-and-depositories }
+  - { q: "How does an IPO work and what is a price band?", expect: ipo-and-primary-market-basics }
+  - { q: "What is ASBA and what happens to my money if I do not get IPO shares?", expect: ipo-and-primary-market-basics }
+  - { q: "What is the difference between a bonus issue and a stock split?", expect: bonus-rights-and-stock-splits }
+  - { q: "What is a rights issue and do I have to subscribe to it?", expect: bonus-rights-and-stock-splits }
+  - { q: "What is KYC and why do I need it to invest?", expect: kyc-for-investors }
+  - { q: "What is the difference between e-KYC, video KYC and CKYC?", expect: kyc-for-investors }
+  - { q: "Show me with numbers how a concentrated portfolio loses more than a diversified one.", expect: diversification-worked-example }
+  - { q: "How is a portfolio diversification score calculated?", expect: diversification-worked-example }
+  # batch 4 (2026-11-18), not yet run against the real index
+  - { q: "What are the SEBI categories of mutual fund schemes?", expect: mutual-fund-scheme-categories }
+  - { q: "What is a gilt fund and what is a liquid fund?", expect: mutual-fund-scheme-categories }
+  - { q: "What is a circuit breaker in the stock market?", expect: market-circuit-breakers }
+  - { q: "Why is trading halted when the Nifty falls sharply?", expect: market-circuit-breakers }
+  - { q: "Why can an ETF trade at a premium or discount to its NAV?", expect: etf-structure-and-premium-discount }
+  - { q: "How are ETF units created and redeemed?", expect: etf-structure-and-premium-discount }
+  - { q: "What is a pump and dump scheme?", expect: pump-and-dump-schemes }
+  - { q: "A stranger in a group is urging me to buy a small stock before Friday because of inside information. Is this a scheme?", expect: pump-and-dump-schemes }
+  - { q: "What is the difference between systematic and unsystematic risk?", expect: types-of-investment-risk }
+  - { q: "What are the main types of investment risk?", expect: types-of-investment-risk }
+  - { q: "What is a contract note and why should I keep it?", expect: contract-notes-and-account-statements }
+  - { q: "What is a consolidated account statement (CAS)?", expect: contract-notes-and-account-statements }
+  - { q: "Do I have to give my broker a power of attorney?", expect: power-of-attorney-and-running-account }
+  - { q: "What is a running account authorization with a stock broker?", expect: power-of-attorney-and-running-account }
+  - { q: "What is net worth and how do I set SMART financial goals?", expect: financial-planning-and-smart-goals }
+  - { q: "What is the difference between short-term, medium-term and long-term financial goals?", expect: financial-planning-and-smart-goals }
+  - { q: "What should I do if an unauthorised transaction happens in my bank account?", expect: unauthorised-transactions-and-customer-liability }
+  - { q: "Am I liable for a fraudulent online banking transaction?", expect: unauthorised-transactions-and-customer-liability }
+  - { q: "What is the difference between term insurance and endowment insurance?", expect: insurance-basics-and-types }
+  - { q: "What is a ULIP?", expect: insurance-basics-and-types }
+  # batch 5 (2026-11-18), not yet run against the real index
+  - { q: "What are the do's and don'ts of investing in the securities market?", expect: dos-and-donts-and-investor-rights }
+  - { q: "What are my rights as an investor dealing with a stock broker?", expect: dos-and-donts-and-investor-rights }
+  - { q: "What happens to unclaimed dividends and shares?", expect: unclaimed-shares-and-dividends-iepf }
+  - { q: "What is the Investor Education and Protection Fund?", expect: unclaimed-shares-and-dividends-iepf }
+  - { q: "Why do I need a will if I have named a nominee?", expect: estate-planning-and-wills }
+  - { q: "What is estate planning?", expect: estate-planning-and-wills }
+  - { q: "Why should I start planning for retirement early?", expect: retirement-planning-principles }
+  - { q: "What are the key principles of retirement planning?", expect: retirement-planning-principles }
+  - { q: "What is the rule of 72?", expect: rule-of-72 }
+  - { q: "How can I estimate how long it takes my money to double?", expect: rule-of-72 }
+  - { q: "What is the Sukanya Samriddhi scheme and how is it different from a Kisan Vikas Patra?", expect: government-small-savings-schemes }
+  - { q: "What is a National Savings Certificate?", expect: government-small-savings-schemes }
+  - { q: "What is the Atal Pension Yojana and who is it for?", expect: government-social-security-schemes }
+  - { q: "What are Jan Dhan accounts and the government insurance schemes linked to them?", expect: government-social-security-schemes }
+  - { q: "What is the difference between NEFT, RTGS, IMPS and UPI?", expect: bank-accounts-and-digital-payment-modes }
+  - { q: "What is a basic savings bank deposit account?", expect: bank-accounts-and-digital-payment-modes }
+  - { q: "What is the difference between a credit card and a debit card?", expect: credit-and-debit-cards }
+  - { q: "How do I use my ATM card safely?", expect: credit-and-debit-cards }
+  - { q: "What is an EMI and how much interest will I pay on a loan?", expect: loans-and-emi-basics }
+  - { q: "What is collateral and what are the 5 Cs of credit?", expect: loans-and-emi-basics }
+  # batch 6 (2026-11-18), not yet run against the real index
+  - { q: "What is a budget and why is it the first step of financial planning?", expect: budgeting-and-saving-habits }
+  - { q: "What does paying yourself first mean?", expect: budgeting-and-saving-habits }
+  - { q: "What is the time value of money?", expect: time-value-of-money }
+  - { q: "What is the present value of money I will receive in five years?", expect: time-value-of-money }
+  - { q: "What is the difference between open-ended and close-ended mutual funds?", expect: open-closed-and-interval-funds }
+  - { q: "What is an interval fund?", expect: open-closed-and-interval-funds }
+  - { q: "What is a life cycle fund and how does a glide path work?", expect: life-cycle-and-goal-based-funds }
+  - { q: "What is a retirement fund or children's fund in mutual funds and what is its lock-in?", expect: life-cycle-and-goal-based-funds }
+  - { q: "What is a systematic withdrawal plan (SWP)?", expect: systematic-withdrawal-and-transfer-plans }
+  - { q: "What is the difference between SIP, SWP and STP?", expect: systematic-withdrawal-and-transfer-plans }
+  - { q: "What are treasury bills, commercial paper and certificates of deposit?", expect: money-market-instruments }
+  - { q: "Why are treasury bills issued at a discount?", expect: money-market-instruments }
+  - { q: "What is a preference share and how is it different from an equity share?", expect: preference-shares-and-hybrid-instruments }
+  - { q: "What are cumulative preference shares?", expect: preference-shares-and-hybrid-instruments }
+  - { q: "What is call risk in a bond?", expect: bond-risks-default-rate-liquidity-and-call }
+  - { q: "What are the risks of investing in bonds?", expect: bond-risks-default-rate-liquidity-and-call }
+  - { q: "What is commodity price risk?", expect: commodity-markets-basics }
+  - { q: "What are commodities and how are they traded?", expect: commodity-markets-basics }
+  - { q: "What is a Basic Services Demat Account (BSDA)?", expect: basic-services-demat-account }
+  - { q: "Who is eligible for a BSDA and what are its charges?", expect: basic-services-demat-account }
+
+  # batch 7 (2026-11-18), not yet run against the real index
+  - { q: "Which income tax deductions are available to savers under section 80C and 80D?", expect: income-tax-deductions-for-savers-india }
+  - { q: "How does a tax deduction reduce the tax I pay?", expect: income-tax-deductions-for-savers-india }
+  - { q: "What is an ELSS fund and what is its lock-in period?", expect: elss-tax-saving-mutual-funds }
+  - { q: "Is an ELSS tax-saving fund safe?", expect: elss-tax-saving-mutual-funds }
+  - { q: "What is a margin pledge for shares?", expect: margin-pledge-and-early-pay-in }
+  - { q: "What is early pay-in in share trading?", expect: margin-pledge-and-early-pay-in }
+  - { q: "What do pay-in and pay-out day mean in a share trade?", expect: trading-days-pay-in-and-pay-out }
+  - { q: "What does T+2 settlement mean?", expect: trading-days-pay-in-and-pay-out }
 
 borderline:
   - { q: "What is the current LTCG tax rate on equity mutual funds?" }

@@ -5,7 +5,10 @@ Run:  .venv/bin/python -m pytest tests/eval/retrieval_eval_test.py -v
 
 Why it exists: min_score was chosen from a measured gap. Measured 2026-11-17 with 51 articles and 102 in_kb questions: in_kb
 lowest 0.718 (top-3 hit 102/102, top-1 96/102), off_topic highest 0.652. If someone changes the threshold, the embedding model, the
-chunking or the knowledge base, these tests say whether the gap survived. (Price questions are in `routed_to_market`: the router,
+chunking or the knowledge base, these tests say whether the gap survived.
+Re-measured 2026-11-18 with 100 articles and 200 in_kb questions: in_kb lowest 0.711, but 'Which stock will double in the next month?'
+scored 0.675 (rule-of-72 and pump-and-dump chunks), above the old 0.66 cut-off, so min_score moved to 0.69. The gap is now narrow
+on both sides (0.675 below, 0.711 above): re-measure after every batch of articles. (Price questions are in `routed_to_market`: the router,
 not retrieval, handles them; see tests/kb.)
 
 The free tier of the embedding API allows 100 requests a minute and 1,000 a day: a 429 is waited out, and an

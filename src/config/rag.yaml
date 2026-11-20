@@ -32,9 +32,8 @@ embedder:
   api_key_env: GOOGLE_API_KEY      # name of the env var, never the key itself
   document_prefix: "title: {title} | text: {text}"
   query_prefix: "task: search result | query: {text}"
-  # rate_limit:
-  #   requests_per_minute: 100
-  #   tokens_per_minute: 30000
+  requests_per_minute: 90         # free tier allows 100 a minute; every text in a batch counts, so batches are paced to fit
+  # tokens_per_minute: 30000
   # retry:
   #   max_attempts: 5
   #   backoff_base_seconds: 2
@@ -61,7 +60,7 @@ retrieval:
   fetch_multiplier: 4
   category_field: topic
   post_processors:
-    - { type: threshold, min_score: 0.66 }
+    - { type: threshold, min_score: 0.69 }
     - { type: dedupe, similarity: 0.9 }
     - { type: per_doc_cap, max_per_doc: 2 }
 
